@@ -1,8 +1,13 @@
 import { WorkoutPlansRepository } from '@/domain/workout/application/repositories/workout-plans-repository'
 import { WorkoutPlan } from '@/domain/workout/enterprise/entities/workout-plan'
+import { InMemoryWorkoutPlanExercisesRepository } from './in-memory-workout-plan-exercises-repository'
 
 export class InMemoryWorkoutPlansRepository implements WorkoutPlansRepository {
   public items: WorkoutPlan[] = []
+
+  constructor(
+    private workoutPlanExercisesRepository: InMemoryWorkoutPlanExercisesRepository,
+  ) {}
 
   async findById(id: string): Promise<WorkoutPlan | null> {
     const workoutPlan = this.items.find((item) => item.id.toString() === id)
@@ -31,9 +36,9 @@ export class InMemoryWorkoutPlansRepository implements WorkoutPlansRepository {
       (item) => item.id === workoutPlan.id,
     )
 
-    // this.workoutPlanExercisesRepository.deleteManyByWorkoutPlanId(
-    //   workoutPlan.id.toString(),
-    // )
+    this.workoutPlanExercisesRepository.deleteManyByWorkoutPlanId(
+      workoutPlan.id.toString(),
+    )
 
     this.items.splice(workoutPlanIndex, 1)
   }

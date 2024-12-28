@@ -1,10 +1,8 @@
-import { FakeHasher } from 'test/cryptography/fake-hasher'
-import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
-import { RegisterUserUseCase } from './register-user'
-import { makeUser } from 'test/factories/make-user'
-import { UserAlreadyExistsError } from './errors/user-already-exists-error'
-import { AuthenticateUserUseCase } from './authenticate-user'
 import { FakeEncrypter } from 'test/cryptography/fake-encrypter'
+import { FakeHasher } from 'test/cryptography/fake-hasher'
+import { makeUser } from 'test/factories/make-user'
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
+import { AuthenticateUserUseCase } from './authenticate-user'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 
 let inMemoryUsersRepository: InMemoryUsersRepository

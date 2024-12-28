@@ -7,7 +7,7 @@ import { WorkoutPlanExerciseList } from './workout-plan-exercise-list'
 export interface WorkoutPlanProps {
   title: string
   slug: Slug
-  authorId: UniqueEntityID
+  ownerId: UniqueEntityID
   exercises: WorkoutPlanExerciseList
   createdAt: Date
   updatedAt?: Date | null
@@ -29,8 +29,8 @@ export class WorkoutPlan extends AggregateRoot<WorkoutPlanProps> {
     return this.props.slug
   }
 
-  get authorId() {
-    return this.props.authorId
+  get ownerId() {
+    return this.props.ownerId
   }
 
   get exercises() {
