@@ -29,6 +29,16 @@ export class InMemoryExercisesRepository implements ExercisesRepository {
     return exercise
   }
 
+  async findBySlug(slug: string): Promise<Exercise | null> {
+    const exercise = this.items.find((item) => item.slug.value === slug)
+
+    if (!exercise) {
+      return null
+    }
+
+    return exercise
+  }
+
   async create(exercise: Exercise): Promise<void> {
     this.items.push(exercise)
   }
