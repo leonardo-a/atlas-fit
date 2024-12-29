@@ -9,6 +9,10 @@ export abstract class WorkoutPlanExercisesRepository {
 
   abstract create(workoutPlanExercise: WorkoutPlanExercise): Promise<void>
 
+  abstract createMany(
+    workoutPlanExercises: WorkoutPlanExercise[],
+  ): Promise<void>
+
   abstract delete(workoutPlanExercise: WorkoutPlanExercise): Promise<void>
 
   abstract deleteManyByWorkoutPlanId(workoutPlanId: string): Promise<void>

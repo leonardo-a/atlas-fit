@@ -32,6 +32,10 @@ export class InMemoryWorkoutPlanExercisesRepository
     this.items.push(workoutPlanExercise)
   }
 
+  async createMany(workoutPlanExercises: WorkoutPlanExercise[]): Promise<void> {
+    this.items.push(...workoutPlanExercises)
+  }
+
   async delete(workoutPlanExercise: WorkoutPlanExercise): Promise<void> {
     const workoutPlanExerciseIndex = this.items.findIndex(
       (item) => item.id === workoutPlanExercise.id,

@@ -1,6 +1,6 @@
+import { InMemoryWorkoutPlanExercisesRepository } from 'test/repositories/in-memory-workout-plan-exercises-repository'
 import { InMemoryWorkoutPlansRepository } from 'test/repositories/in-memory-workout-plans-repository'
 import { CreateWorkoutPlanUseCase } from './create-workout-plan'
-import { InMemoryWorkoutPlanExercisesRepository } from 'test/repositories/in-memory-workout-plan-exercises-repository'
 
 let inMemoryWorkoutPlansRepository: InMemoryWorkoutPlansRepository
 let inMemoryWorkoutPlanExercisesRepository: InMemoryWorkoutPlanExercisesRepository

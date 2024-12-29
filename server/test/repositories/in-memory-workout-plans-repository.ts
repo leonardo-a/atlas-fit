@@ -21,6 +21,10 @@ export class InMemoryWorkoutPlansRepository implements WorkoutPlansRepository {
 
   async create(workoutPlan: WorkoutPlan): Promise<void> {
     this.items.push(workoutPlan)
+
+    await this.workoutPlanExercisesRepository.createMany(
+      workoutPlan.exercises.getItems(),
+    )
   }
 
   async save(workoutPlan: WorkoutPlan): Promise<void> {

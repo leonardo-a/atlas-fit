@@ -1,7 +1,7 @@
+import { makeExercise } from 'test/factories/make-exercise'
 import { InMemoryExercisesRepository } from 'test/repositories/in-memory-exercises-repository'
 import { CreateExerciseUseCase } from './create-exercise'
 import { ExerciseAlreadyExistsError } from './errors/exercise-already-exists-error'
-import { makeExercise } from 'test/factories/make-exercise'
 
 let inMemoryExercisesRepository: InMemoryExercisesRepository
 let sut: CreateExerciseUseCase
