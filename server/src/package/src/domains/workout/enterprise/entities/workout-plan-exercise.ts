@@ -49,6 +49,10 @@ export class WorkoutPlanExercise extends Entity<WorkoutPlanExerciseProps> {
     this.touch()
   }
 
+  get updatedAt() {
+    return this.props.updatedAt
+  }
+
   private touch() {
     this.props.updatedAt = new Date()
   }

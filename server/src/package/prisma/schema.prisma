@@ -44,13 +44,13 @@ model WorkoutPlan {
 }
 
 model WorkoutPlanExercise {
-  id            String   @id @default(uuid())
-  exerciseId    String   @map("exercise_id")
-  workoutPlanId String   @map("workout_plan_id")
-  weekDay       Int      @map("week_day")
+  id            String    @id @default(uuid())
+  exerciseId    String    @map("exercise_id")
+  workoutPlanId String    @map("workout_plan_id")
+  weekDay       Int       @map("week_day")
   sets          Int
   repetitions   Int
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  updatedAt     DateTime? @updatedAt @map("updated_at")
 
   exercise    Exercise    @relation(fields: [exerciseId], references: [id])
   workoutPlan WorkoutPlan @relation(fields: [workoutPlanId], references: [id])

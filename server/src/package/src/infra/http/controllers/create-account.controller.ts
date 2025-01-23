@@ -14,10 +14,10 @@ import { z } from 'zod'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation.pipe'
 
 import { Public } from '@/infra/auth/public'
-import { AuthenticateUserUseCase } from '@/domain/workout/application/use-cases/authenticate-user'
-import { InvalidCredentialsError } from '@/domain/workout/application/use-cases/errors/invalid-credentials-error'
-import { RegisterUserUseCase } from '@/domain/workout/application/use-cases/register-user'
-import { UserAlreadyExistsError } from '@/domain/workout/application/use-cases/errors/user-already-exists-error'
+import { AuthenticateUserUseCase } from '@/domains/workout/application/use-cases/authenticate-user'
+import { InvalidCredentialsError } from '@/domains/workout/application/use-cases/errors/invalid-credentials-error'
+import { RegisterUserUseCase } from '@/domains/workout/application/use-cases/register-user'
+import { UserAlreadyExistsError } from '@/domains/workout/application/use-cases/errors/user-already-exists-error'
 
 const createAccountBodySchema = z.object({
   name: z.string(),

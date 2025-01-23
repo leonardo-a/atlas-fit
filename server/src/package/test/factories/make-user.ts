@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { User, UserProps } from '@/domain/workout/enterprise/entities/user'
+import { User, UserProps } from '@/domains/workout/enterprise/entities/user'
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { PrismaUserMapper } from '@/infra/database/prisma/mappers/prisma-user-mapper'
@@ -22,7 +22,6 @@ export function makeUser(
 
   return user
 }
-
 
 @Injectable()
 export class UserFactory {

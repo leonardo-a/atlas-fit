@@ -1,5 +1,5 @@
-import { WorkoutPlansRepository } from '@/domain/workout/application/repositories/workout-plans-repository'
-import { WorkoutPlan } from '@/domain/workout/enterprise/entities/workout-plan'
+import { WorkoutPlansRepository } from '@/domains/workout/application/repositories/workout-plans-repository'
+import { WorkoutPlan } from '@/domains/workout/enterprise/entities/workout-plan'
 import { InMemoryWorkoutPlanExercisesRepository } from './in-memory-workout-plan-exercises-repository'
 
 export class InMemoryWorkoutPlansRepository implements WorkoutPlansRepository {

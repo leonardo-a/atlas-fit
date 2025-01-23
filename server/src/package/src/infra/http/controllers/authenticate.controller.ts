@@ -13,8 +13,8 @@ import { z } from 'zod'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation.pipe'
 
 import { Public } from '@/infra/auth/public'
-import { AuthenticateUserUseCase } from '@/domain/workout/application/use-cases/authenticate-user'
-import { InvalidCredentialsError } from '@/domain/workout/application/use-cases/errors/invalid-credentials-error'
+import { AuthenticateUserUseCase } from '@/domains/workout/application/use-cases/authenticate-user'
+import { InvalidCredentialsError } from '@/domains/workout/application/use-cases/errors/invalid-credentials-error'
 
 const authenticateBodySchema = z.object({
   email: z.string().email(),

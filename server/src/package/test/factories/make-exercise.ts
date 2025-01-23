@@ -4,7 +4,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import {
   Exercise,
   ExerciseProps,
-} from '@/domain/workout/enterprise/entities/exercise'
+} from '@/domains/workout/enterprise/entities/exercise'
 
 export function makeExercise(
   override: Partial<ExerciseProps> = {},

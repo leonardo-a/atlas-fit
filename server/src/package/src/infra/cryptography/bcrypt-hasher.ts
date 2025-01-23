@@ -1,7 +1,7 @@
 import { compare, hash } from 'bcryptjs'
 
-import { HashComparer } from '@/domain/workout/application/cryptography/hash-comparer'
-import { HashGenerator } from '@/domain/workout/application/cryptography/hash-generator'
+import { HashComparer } from '@/domains/workout/application/cryptography/hash-comparer'
+import { HashGenerator } from '@/domains/workout/application/cryptography/hash-generator'
 
 export class BcryptHasher implements HashGenerator, HashComparer {
   private HASH_SALT_LENGTH = 8

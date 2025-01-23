@@ -1,5 +1,5 @@
-import { UsersRepository } from '@/domain/workout/application/repositories/users-repository'
-import { User } from '@/domain/workout/enterprise/entities/user'
+import { UsersRepository } from '@/domains/workout/application/repositories/users-repository'
+import { User } from '@/domains/workout/enterprise/entities/user'
 
 export class InMemoryUsersRepository implements UsersRepository {
   public items: User[] = []

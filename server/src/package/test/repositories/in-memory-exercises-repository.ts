@@ -1,6 +1,6 @@
 import { FilterParams } from '@/core/repositories/filter-params'
-import { ExercisesRepository } from '@/domain/workout/application/repositories/exercises-repository'
-import { Exercise } from '@/domain/workout/enterprise/entities/exercise'
+import { ExercisesRepository } from '@/domains/workout/application/repositories/exercises-repository'
+import { Exercise } from '@/domains/workout/enterprise/entities/exercise'
 
 export class InMemoryExercisesRepository implements ExercisesRepository {
   public items: Exercise[] = []
