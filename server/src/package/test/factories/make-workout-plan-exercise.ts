@@ -32,7 +32,7 @@ export function makeWorkoutPlanExercise(
 export class WorkoutPlanExerciseFactory {
   constructor(private prisma: PrismaService) {}
 
-  async makePrismaExercise(
+  async makePrismaWorkoutPlanExercise(
     data: Partial<WorkoutPlanExerciseProps> = {},
   ): Promise<WorkoutPlanExercise> {
     const workoutPlanExercise = makeWorkoutPlanExercise(data)
