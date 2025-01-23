@@ -9,6 +9,16 @@ export class InMemoryWorkoutPlansRepository implements WorkoutPlansRepository {
     private workoutPlanExercisesRepository: InMemoryWorkoutPlanExercisesRepository,
   ) {}
 
+  async findBySlug(slug: string): Promise<WorkoutPlan | null> {
+    const workoutPlan = this.items.find((item) => item.slug.value === slug)
+
+    if (!workoutPlan) {
+      return null
+    }
+
+    return workoutPlan
+  }
+
   async findById(id: string): Promise<WorkoutPlan | null> {
     const workoutPlan = this.items.find((item) => item.id.toString() === id)
 

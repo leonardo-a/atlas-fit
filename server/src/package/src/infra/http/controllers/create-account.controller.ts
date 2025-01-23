@@ -5,19 +5,15 @@ import {
   Controller,
   HttpCode,
   Post,
-  UnauthorizedException,
   UsePipes,
 } from '@nestjs/common'
 import { z } from 'zod'
 
-
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation.pipe'
 
-import { Public } from '@/infra/auth/public'
-import { AuthenticateUserUseCase } from '@/domains/workout/application/use-cases/authenticate-user'
-import { InvalidCredentialsError } from '@/domains/workout/application/use-cases/errors/invalid-credentials-error'
-import { RegisterUserUseCase } from '@/domains/workout/application/use-cases/register-user'
 import { UserAlreadyExistsError } from '@/domains/workout/application/use-cases/errors/user-already-exists-error'
+import { RegisterUserUseCase } from '@/domains/workout/application/use-cases/register-user'
+import { Public } from '@/infra/auth/public'
 
 const createAccountBodySchema = z.object({
   name: z.string(),

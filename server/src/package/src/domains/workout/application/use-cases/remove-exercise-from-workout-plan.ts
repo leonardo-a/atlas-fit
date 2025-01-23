@@ -3,6 +3,7 @@ import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-e
 import { WorkoutPlanExercisesRepository } from '../repositories/workout-plan-exercises-repository'
 import { WorkoutPlansRepository } from '../repositories/workout-plans-repository'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
+import { Injectable } from '@nestjs/common'
 
 interface RemoveExerciseFromWorkoutPlanUseCaseRequest {
   workoutPlanExerciseId: string
@@ -14,6 +15,7 @@ type RemoveExerciseFromWorkoutPlanUseCaseResponse = Either<
   null
 >
 
+@Injectable()
 export class RemoveExerciseFromWorkoutPlanUseCase {
   constructor(
     private workoutPlanExercisesRepostiory: WorkoutPlanExercisesRepository,

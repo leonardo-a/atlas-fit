@@ -2,6 +2,7 @@ import { Either, left, right } from '@/core/either'
 import { Exercise } from '../../enterprise/entities/exercise'
 import { ExercisesRepository } from '../repositories/exercises-repository'
 import { ExerciseAlreadyExistsError } from './errors/exercise-already-exists-error'
+import { Injectable } from '@nestjs/common'
 
 interface CreateExerciseUseCaseRequest {
   name: string
@@ -15,6 +16,7 @@ type CreateExerciseUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class CreateExerciseUseCase {
   constructor(private exercisesRepository: ExercisesRepository) {}
 

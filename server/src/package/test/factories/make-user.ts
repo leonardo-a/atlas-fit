@@ -1,10 +1,10 @@
 import { faker } from '@faker-js/faker'
+import { Injectable } from '@nestjs/common'
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { User, UserProps } from '@/domains/workout/enterprise/entities/user'
-import { Injectable } from '@nestjs/common'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { PrismaUserMapper } from '@/infra/database/prisma/mappers/prisma-user-mapper'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
 
 export function makeUser(
   override: Partial<UserProps> = {},

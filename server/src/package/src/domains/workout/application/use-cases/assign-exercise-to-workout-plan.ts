@@ -12,6 +12,7 @@ import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-e
 import { WorkoutPlanExerciseAlreadyExistsOnWeekDayError } from './errors/workout-plan-exercise-already-exists-on-week-day-error'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ExerciseLimitReachedError } from './errors/exercise-limit-reached-error'
+import { Injectable } from '@nestjs/common'
 
 interface AssignExerciseToWorkoutPlanUseCaseRequest {
   ownerId: string
@@ -33,6 +34,7 @@ type AssignExerciseToWorkoutPlanUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class AssignExerciseToWorkoutPlanUseCase {
   constructor(
     private workoutPlanExercisesRepository: WorkoutPlanExercisesRepository,
