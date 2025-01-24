@@ -1,14 +1,17 @@
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { makeExercise } from 'test/factories/make-exercise'
 import { makeWorkoutPlan } from 'test/factories/make-workout-plan'
 import { makeWorkoutPlanExercise } from 'test/factories/make-workout-plan-exercise'
 import { InMemoryExercisesRepository } from 'test/repositories/in-memory-exercises-repository'
+import { InMemoryPersonalTrainersRepository } from 'test/repositories/in-memory-personal-trainers-repository'
 import { InMemoryWorkoutPlanExercisesRepository } from 'test/repositories/in-memory-workout-plan-exercises-repository'
 import { InMemoryWorkoutPlansRepository } from 'test/repositories/in-memory-workout-plans-repository'
 import { AssignExerciseToWorkoutPlanUseCase } from './assign-exercise-to-workout-plan'
-import { WorkoutPlanExerciseAlreadyExistsOnWeekDayError } from './errors/workout-plan-exercise-already-exists-on-week-day-error'
-import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ExerciseLimitReachedError } from './errors/exercise-limit-reached-error'
+import { WorkoutPlanExerciseAlreadyExistsOnWeekDayError } from './errors/workout-plan-exercise-already-exists-on-week-day-error'
+import { makePersonalTrainer } from 'test/factories/make-personal-trainer'
 
+let inMemoryPersonalTrainersRepository: InMemoryPersonalTrainersRepository
 let inMemoryWorkoutPlanExercisesRepository: InMemoryWorkoutPlanExercisesRepository
 let inMemoryWorkoutPlansRepository: InMemoryWorkoutPlansRepository
 let inMemoryExercisesRepository: InMemoryExercisesRepository
@@ -16,6 +19,8 @@ let sut: AssignExerciseToWorkoutPlanUseCase
 
 describe('Assign Exercise To Workout Plan Use Case', () => {
   beforeEach(() => {
+    inMemoryPersonalTrainersRepository =
+      new InMemoryPersonalTrainersRepository()
     inMemoryExercisesRepository = new InMemoryExercisesRepository()
     inMemoryWorkoutPlanExercisesRepository =
       new InMemoryWorkoutPlanExercisesRepository()
@@ -24,6 +29,7 @@ describe('Assign Exercise To Workout Plan Use Case', () => {
     )
 
     sut = new AssignExerciseToWorkoutPlanUseCase(
+      inMemoryPersonalTrainersRepository,
       inMemoryWorkoutPlanExercisesRepository,
       inMemoryWorkoutPlansRepository,
       inMemoryExercisesRepository,
@@ -31,20 +37,22 @@ describe('Assign Exercise To Workout Plan Use Case', () => {
   })
 
   it('should be able to assign an exercise to a workout plan', async () => {
+    const personalTrainer = makePersonalTrainer()
     const workoutPlan = makeWorkoutPlan()
     const exercise = makeExercise({
       name: 'Bench Press',
     })
 
+    inMemoryPersonalTrainersRepository.items.push(personalTrainer)
     inMemoryExercisesRepository.items.push(exercise)
     inMemoryWorkoutPlansRepository.items.push(workoutPlan)
 
     const exerciseId = exercise.id.toString()
     const workoutPlanId = workoutPlan.id.toString()
-    const ownerId = workoutPlan.ownerId.toString()
+    const userId = personalTrainer.id.toString()
 
     const response = await sut.execute({
-      ownerId,
+      userId,
       exerciseId,
       workoutPlanId,
       repetitions: 12,
@@ -57,17 +65,19 @@ describe('Assign Exercise To Workout Plan Use Case', () => {
   })
 
   it('should be able to assign same exercise on different week days', async () => {
+    const personalTrainer = makePersonalTrainer()
     const workoutPlan = makeWorkoutPlan()
     const exercise = makeExercise({
       name: 'Bench Press',
     })
 
+    inMemoryPersonalTrainersRepository.items.push(personalTrainer)
     inMemoryExercisesRepository.items.push(exercise)
     inMemoryWorkoutPlansRepository.items.push(workoutPlan)
 
     const exerciseId = exercise.id.toString()
     const workoutPlanId = workoutPlan.id.toString()
-    const ownerId = workoutPlan.ownerId.toString()
+    const userId = personalTrainer.id.toString()
 
     inMemoryWorkoutPlanExercisesRepository.items.push(
       makeWorkoutPlanExercise({
@@ -80,7 +90,7 @@ describe('Assign Exercise To Workout Plan Use Case', () => {
     )
 
     const response = await sut.execute({
-      ownerId,
+      userId,
       exerciseId,
       workoutPlanId,
       repetitions: 12,
@@ -93,17 +103,19 @@ describe('Assign Exercise To Workout Plan Use Case', () => {
   })
 
   it('should not assign same exercise twice on the same week day', async () => {
+    const personalTrainer = makePersonalTrainer()
     const workoutPlan = makeWorkoutPlan()
     const exercise = makeExercise({
       name: 'Bench Press',
     })
 
+    inMemoryPersonalTrainersRepository.items.push(personalTrainer)
     inMemoryExercisesRepository.items.push(exercise)
     inMemoryWorkoutPlansRepository.items.push(workoutPlan)
 
     const exerciseId = exercise.id.toString()
     const workoutPlanId = workoutPlan.id.toString()
-    const ownerId = workoutPlan.ownerId.toString()
+    const userId = personalTrainer.id.toString()
 
     inMemoryWorkoutPlanExercisesRepository.items.push(
       makeWorkoutPlanExercise({
@@ -116,7 +128,7 @@ describe('Assign Exercise To Workout Plan Use Case', () => {
     )
 
     const response = await sut.execute({
-      ownerId,
+      userId,
       exerciseId,
       workoutPlanId,
       repetitions: 12,
@@ -130,7 +142,7 @@ describe('Assign Exercise To Workout Plan Use Case', () => {
     )
   })
 
-  it('should not be able to a different user assign an exercise to a workout plan', async () => {
+  it('should not be able to a student assign an exercise to a workout plan', async () => {
     const workoutPlan = makeWorkoutPlan()
     const exercise = makeExercise({
       name: 'Bench Press',
@@ -143,7 +155,7 @@ describe('Assign Exercise To Workout Plan Use Case', () => {
     const workoutPlanId = workoutPlan.id.toString()
 
     const response = await sut.execute({
-      ownerId: 'invalid-owner-id',
+      userId: 'invalid-personal-trainer-id',
       exerciseId,
       workoutPlanId,
       repetitions: 12,
@@ -157,8 +169,10 @@ describe('Assign Exercise To Workout Plan Use Case', () => {
 
   it('should not be able to exceed exercise limit per workout plan', async () => {
     const workoutPlan = makeWorkoutPlan()
+    const personalTrainer = makePersonalTrainer()
 
     inMemoryWorkoutPlansRepository.items.push(workoutPlan)
+    inMemoryPersonalTrainersRepository.items.push(personalTrainer)
 
     for (let i = 0; i < 40; i++) {
       const exercise = makeExercise({
@@ -180,8 +194,10 @@ describe('Assign Exercise To Workout Plan Use Case', () => {
 
     inMemoryExercisesRepository.items.push(exercise)
 
+    const userId = personalTrainer.id.toString()
+
     const response = await sut.execute({
-      ownerId: workoutPlan.ownerId.toString(),
+      userId,
       exerciseId: exercise.id.toString(),
       workoutPlanId: workoutPlan.id.toString(),
       repetitions: 12,

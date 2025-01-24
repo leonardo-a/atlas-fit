@@ -1,18 +1,22 @@
+import { Injectable } from '@nestjs/common'
+
 import { Either, left, right } from '@/core/either'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { WorkoutPlan } from '../../enterprise/entities/workout-plan'
 import { WorkoutPlanExerciseList } from '../../enterprise/entities/workout-plan-exercise-list'
+import { PersonalTrainersRepository } from '../repositories/personal-trainers-repository'
 import { WorkoutPlansRepository } from '../repositories/workout-plans-repository'
 import { WorkoutPlanAlreadyExistsError } from './errors/workout-plan-already-exists-error'
-import { Injectable } from '@nestjs/common'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
 interface CreateWorkoutPlanUseCaseRequest {
+  userId: string
   ownerId: string
   title: string
 }
 
 type CreateWorkoutPlanUseCaseResponse = Either<
-  WorkoutPlanAlreadyExistsError,
+  WorkoutPlanAlreadyExistsError | NotAllowedError,
   {
     workoutPlan: WorkoutPlan
   }
@@ -20,12 +24,23 @@ type CreateWorkoutPlanUseCaseResponse = Either<
 
 @Injectable()
 export class CreateWorkoutPlanUseCase {
-  constructor(private workoutPlansRepository: WorkoutPlansRepository) {}
+  constructor(
+    private personalTrainersRepository: PersonalTrainersRepository,
+    private workoutPlansRepository: WorkoutPlansRepository,
+  ) {}
 
   async execute({
+    userId,
     ownerId,
     title,
   }: CreateWorkoutPlanUseCaseRequest): Promise<CreateWorkoutPlanUseCaseResponse> {
+    const personalTrainer =
+      await this.personalTrainersRepository.findById(userId)
+
+    if (!personalTrainer) {
+      return left(new NotAllowedError())
+    }
+
     const workoutPlan = WorkoutPlan.create({
       ownerId: new UniqueEntityID(ownerId),
       title,

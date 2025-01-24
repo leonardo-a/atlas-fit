@@ -3,8 +3,9 @@ import { Injectable } from '@nestjs/common'
 import { Either, left, right } from '@/core/either'
 import { Encrypter } from '../cryptography/encrypter'
 import { HashComparer } from '../cryptography/hash-comparer'
-import { UsersRepository } from '../repositories/users-repository'
+import { StudentsRepository } from '../repositories/students-repository'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
+import { PersonalTrainersRepository } from '../repositories/personal-trainers-repository'
 
 interface AuthenticateUserUseCaseRequest {
   email: string
@@ -21,7 +22,8 @@ type AuthenticateUserUseCaseResponse = Either<
 @Injectable()
 export class AuthenticateUserUseCase {
   constructor(
-    private usersRepository: UsersRepository,
+    private studentsRepository: StudentsRepository,
+    private personalTrainersRepository: PersonalTrainersRepository,
     private hashComparer: HashComparer,
     private encrypter: Encrypter,
   ) {}
@@ -30,7 +32,11 @@ export class AuthenticateUserUseCase {
     email,
     password,
   }: AuthenticateUserUseCaseRequest): Promise<AuthenticateUserUseCaseResponse> {
-    const user = await this.usersRepository.findByEmail(email)
+    let user = await this.studentsRepository.findByEmail(email)
+
+    if (!user) {
+      user = await this.personalTrainersRepository.findByEmail(email)
+    }
 
     if (!user) {
       return left(new InvalidCredentialsError())
@@ -47,6 +53,7 @@ export class AuthenticateUserUseCase {
 
     const accessToken = await this.encrypter.encrypt({
       sub: user.id.toString(),
+      role: user.role,
     })
 
     return right({

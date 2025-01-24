@@ -13,9 +13,10 @@ import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-e
 import { WorkoutPlanExerciseAlreadyExistsOnWeekDayError } from './errors/workout-plan-exercise-already-exists-on-week-day-error'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ExerciseLimitReachedError } from './errors/exercise-limit-reached-error'
+import { PersonalTrainersRepository } from '../repositories/personal-trainers-repository'
 
 interface AssignExerciseToWorkoutPlanUseCaseRequest {
-  ownerId: string
+  userId: string
   exerciseId: string
   workoutPlanId: string
   repetitions: number
@@ -37,19 +38,27 @@ type AssignExerciseToWorkoutPlanUseCaseResponse = Either<
 @Injectable()
 export class AssignExerciseToWorkoutPlanUseCase {
   constructor(
+    private personalTrainersRepository: PersonalTrainersRepository,
     private workoutPlanExercisesRepository: WorkoutPlanExercisesRepository,
     private workoutPlansRepository: WorkoutPlansRepository,
     private exercisesRepository: ExercisesRepository,
   ) {}
 
   async execute({
-    ownerId,
+    userId,
     exerciseId,
     workoutPlanId,
     repetitions,
     sets,
     weekDay,
   }: AssignExerciseToWorkoutPlanUseCaseRequest): Promise<AssignExerciseToWorkoutPlanUseCaseResponse> {
+    const personalTrainer =
+      await this.personalTrainersRepository.findById(userId)
+
+    if (!personalTrainer) {
+      return left(new NotAllowedError())
+    }
+
     if (weekDay < 1 && weekDay > 7) {
       return left(new InvalidWeekDayError())
     }
@@ -65,10 +74,6 @@ export class AssignExerciseToWorkoutPlanUseCase {
 
     if (!workoutPlan) {
       return left(new ResourceNotFoundError())
-    }
-
-    if (workoutPlan.ownerId.toString() !== ownerId) {
-      return left(new NotAllowedError())
     }
 
     const workoutPlanExercise = WorkoutPlanExercise.create({

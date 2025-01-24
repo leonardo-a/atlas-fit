@@ -7,11 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Roles {
+  ADMIN
+  PERSONAL_TRAINER
+  STUDENT
+}
+
 model User {
   id       String @id @default(uuid())
   name     String
   email    String @unique
   password String
+  role     Roles  @default(STUDENT)
 
   workoutPlans WorkoutPlan[]
 

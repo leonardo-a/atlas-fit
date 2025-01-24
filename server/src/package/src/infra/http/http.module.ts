@@ -4,7 +4,7 @@ import { AssignExerciseToWorkoutPlanUseCase } from '@/domains/workout/applicatio
 import { AuthenticateUserUseCase } from '@/domains/workout/application/use-cases/authenticate-user'
 import { CreateExerciseUseCase } from '@/domains/workout/application/use-cases/create-exercise'
 import { CreateWorkoutPlanUseCase } from '@/domains/workout/application/use-cases/create-workout-plan'
-import { RegisterUserUseCase } from '@/domains/workout/application/use-cases/register-user'
+import { RegisterStudentUseCase } from '@/domains/workout/application/use-cases/register-student'
 import { CryptographyModule } from '../cryptography/cryptography.module'
 import { DatabaseModule } from '../database/database.module'
 import { AssignExerciseToWorkoutPlanController } from './controllers/assign-exercise-to-workout-plan.controller'
@@ -24,7 +24,7 @@ import { CreateWorkoutPlanController } from './controllers/create-workout-plan.c
   ],
   providers: [
     AuthenticateUserUseCase,
-    RegisterUserUseCase,
+    RegisterStudentUseCase,
     CreateWorkoutPlanUseCase,
     CreateExerciseUseCase,
     AssignExerciseToWorkoutPlanUseCase,

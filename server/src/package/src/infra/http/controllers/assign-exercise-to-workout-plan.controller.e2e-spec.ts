@@ -6,14 +6,14 @@ import request from 'supertest'
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
-import { UserFactory } from 'test/factories/make-user'
+import { PersonalTrainerFactory } from 'test/factories/make-personal-trainer'
 import { WorkoutPlanFactory } from 'test/factories/make-workout-plan'
 import { ExerciseFactory } from 'test/factories/make-exercise'
 
 describe('Assign Exercise to Workout Plan (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let userFactory: UserFactory
+  let personalTrainerFactory: PersonalTrainerFactory
   let workoutPlanFactory: WorkoutPlanFactory
   let exerciseFactory: ExerciseFactory
   let jwt: JwtService
@@ -21,13 +21,13 @@ describe('Assign Exercise to Workout Plan (E2E)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [UserFactory, WorkoutPlanFactory, ExerciseFactory],
+      providers: [PersonalTrainerFactory, WorkoutPlanFactory, ExerciseFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
-    userFactory = moduleRef.get(UserFactory)
+    personalTrainerFactory = moduleRef.get(PersonalTrainerFactory)
     exerciseFactory = moduleRef.get(ExerciseFactory)
     workoutPlanFactory = moduleRef.get(WorkoutPlanFactory)
 
@@ -37,9 +37,9 @@ describe('Assign Exercise to Workout Plan (E2E)', () => {
   })
 
   test('[POST] /workout-plan/:workoutPlanId/exercises', async () => {
-    const user = await userFactory.makePrismaUser()
+    const user = await personalTrainerFactory.makePrismaPersonalTrainer()
 
-    const accessToken = jwt.sign({ sub: user.id.toString() })
+    const accessToken = jwt.sign({ sub: user.id.toString(), role: user.role })
 
     const workoutPlan = await workoutPlanFactory.makePrismaWorkoutPlan({
       ownerId: user.id,

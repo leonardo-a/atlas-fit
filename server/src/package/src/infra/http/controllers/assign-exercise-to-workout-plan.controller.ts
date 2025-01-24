@@ -48,10 +48,10 @@ export class AssignExerciseToWorkoutPlanController {
     @CurrentUser() user: UserPayload,
   ) {
     const { exerciseId, repetitions, sets, weekDay } = body
-    const ownerId = user.sub
+    const userId = user.sub
 
     const result = await this.assignExerciseToWorkoutPlan.execute({
-      ownerId,
+      userId,
       exerciseId,
       repetitions,
       sets,

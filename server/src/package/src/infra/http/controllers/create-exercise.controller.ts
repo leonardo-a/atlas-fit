@@ -5,6 +5,7 @@ import {
   Controller,
   HttpCode,
   Post,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { z } from 'zod'
 
@@ -34,6 +35,10 @@ export class CreateExerciseController {
     @CurrentUser() user: UserPayload,
   ) {
     const { name, description } = body
+
+    if (user.role === 'STUDENT') {
+      throw new UnauthorizedException()
+    }
 
     const result = await this.createExercise.execute({
       name,

@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common'
 
 import { ExercisesRepository } from '@/domains/workout/application/repositories/exercises-repository'
-import { UsersRepository } from '@/domains/workout/application/repositories/users-repository'
+import { PersonalTrainersRepository } from '@/domains/workout/application/repositories/personal-trainers-repository'
+import { StudentsRepository } from '@/domains/workout/application/repositories/students-repository'
 import { WorkoutPlanExercisesRepository } from '@/domains/workout/application/repositories/workout-plan-exercises-repository'
 import { WorkoutPlansRepository } from '@/domains/workout/application/repositories/workout-plans-repository'
 import { PrismaService } from './prisma/prisma.service'
 import { PrismaExercisesRepository } from './prisma/repositories/prisma-exercises-repository'
-import { PrismaUsersRepository } from './prisma/repositories/prisma-users-repository'
+import { PrismaPersonalTrainersRepository } from './prisma/repositories/prisma-personal-trainers-repository'
+import { PrismaStudentsRepository } from './prisma/repositories/prisma-students-repository'
 import { PrismaWorkoutPlanExercisesRepository } from './prisma/repositories/prisma-workout-plan-exercises-repository'
 import { PrismaWorkoutPlansRepository } from './prisma/repositories/prisma-workout-plans-repository'
 
@@ -15,8 +17,12 @@ import { PrismaWorkoutPlansRepository } from './prisma/repositories/prisma-worko
   providers: [
     PrismaService,
     {
-      provide: UsersRepository,
-      useClass: PrismaUsersRepository,
+      provide: PersonalTrainersRepository,
+      useClass: PrismaPersonalTrainersRepository,
+    },
+    {
+      provide: StudentsRepository,
+      useClass: PrismaStudentsRepository,
     },
     {
       provide: ExercisesRepository,
@@ -33,7 +39,8 @@ import { PrismaWorkoutPlansRepository } from './prisma/repositories/prisma-worko
   ],
   exports: [
     PrismaService,
-    UsersRepository,
+    PersonalTrainersRepository,
+    StudentsRepository,
     ExercisesRepository,
     WorkoutPlansRepository,
     WorkoutPlanExercisesRepository,

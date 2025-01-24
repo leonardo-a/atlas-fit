@@ -5,6 +5,7 @@ import {
   Controller,
   HttpCode,
   Post,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { z } from 'zod'
 
@@ -13,9 +14,11 @@ import { WorkoutPlanAlreadyExistsError } from '@/domains/workout/application/use
 import { CurrentUser } from '@/infra/auth/current-user.decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
 const createWorkoutPlanBodySchema = z.object({
   title: z.string(),
+  ownerId: z.string().uuid(),
 })
 
 type CreateWorkoutPlanBodySchema = z.infer<typeof createWorkoutPlanBodySchema>
@@ -32,11 +35,13 @@ export class CreateWorkoutPlanController {
     @Body(bodyValidationPipe) body: CreateWorkoutPlanBodySchema,
     @CurrentUser() user: UserPayload,
   ) {
-    const { title } = body
-    const ownerId = user.sub
+    const { title, ownerId } = body
+
+    const userId = user.sub
 
     const result = await this.createWorkoutPlan.execute({
       title,
+      userId,
       ownerId,
     })
 
@@ -46,6 +51,8 @@ export class CreateWorkoutPlanController {
       switch (error.constructor) {
         case WorkoutPlanAlreadyExistsError:
           throw new ConflictException(error.message)
+        case NotAllowedError:
+          throw new UnauthorizedException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

@@ -19,9 +19,10 @@ export class WorkoutPlan extends AggregateRoot<WorkoutPlanProps> {
   }
 
   set title(title: string) {
-    this.props.title = title
-    this.props.slug = Slug.createFromText(title)
+    const timestamp = new Date().getTime()
 
+    this.props.title = title
+    this.props.slug = Slug.createFromText(title.concat(`-${timestamp}`))
     this.touch()
   }
 
