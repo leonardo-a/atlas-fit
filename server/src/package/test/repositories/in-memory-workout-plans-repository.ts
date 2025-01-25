@@ -123,6 +123,7 @@ export class InMemoryWorkoutPlansRepository implements WorkoutPlansRepository {
       id: workoutPlan.id,
       title: workoutPlan.title,
       slug: workoutPlan.slug,
+      description: workoutPlan.description,
       authorId: workoutPlan.authorId,
       author: author.name,
       studentId: workoutPlan.studentId,

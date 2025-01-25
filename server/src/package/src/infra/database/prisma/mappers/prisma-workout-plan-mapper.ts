@@ -1,7 +1,8 @@
+import { Prisma, WorkoutPlan as PrismaWorkoutPlan } from '@prisma/client'
+
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Slug } from '@/domains/workout/enterprise/entities/value-objects/slug'
 import { WorkoutPlan } from '@/domains/workout/enterprise/entities/workout-plan'
-import { Prisma, WorkoutPlan as PrismaWorkoutPlan } from '@prisma/client'
 
 export class PrismaWorkoutPlanMapper {
   static toDomain(raw: PrismaWorkoutPlan): WorkoutPlan {

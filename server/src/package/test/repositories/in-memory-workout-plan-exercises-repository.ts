@@ -52,7 +52,8 @@ export class InMemoryWorkoutPlanExercisesRepository
       }
 
       return WorkoutPlanExerciseWithName.create({
-        id: e.id,
+        workoutPlanExerciseId: e.id,
+        exerciseId: exercise.id,
         name: exercise.name,
         repetitions: e.repetitions,
         sets: e.sets,

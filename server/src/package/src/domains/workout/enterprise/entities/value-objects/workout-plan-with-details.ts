@@ -6,6 +6,7 @@ export interface WorkoutPlanWithDetailsProps {
   id: UniqueEntityID
   title: string
   slug: Slug
+  description?: string | null
   authorId: UniqueEntityID
   author: string
   studentId: UniqueEntityID
@@ -25,6 +26,10 @@ export class WorkoutPlanWithDetails extends ValueObject<WorkoutPlanWithDetailsPr
 
   get slug() {
     return this.props.slug
+  }
+
+  get description() {
+    return this.props.description
   }
 
   get authorId() {

@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common'
 
 import { WorkoutPlanExercisesRepository } from '@/domains/workout/application/repositories/workout-plan-exercises-repository'
+import { WorkoutPlanExerciseWithName } from '@/domains/workout/enterprise/entities/value-objects/workout-plan-exercise-with-name'
 import { WorkoutPlanExercise } from '@/domains/workout/enterprise/entities/workout-plan-exercise'
 import { PrismaWorkoutPlanExerciseMapper } from '../mappers/prisma-workout-plan-exercise-mapper'
+import { PrismaWorkoutPlanExerciseWithNameMapper } from '../mappers/prisma-workout-plan-exercise-with-name-mapper'
 import { PrismaService } from '../prisma.service'
 
 @Injectable()
@@ -38,6 +40,27 @@ export class PrismaWorkoutPlanExercisesRepository
     )
 
     return workoutPlanExercises.map(PrismaWorkoutPlanExerciseMapper.toDomain)
+  }
+
+  async findManyByWorkoutPlanWeekDay(
+    workoutPlanId: string,
+    weekDay: number,
+  ): Promise<WorkoutPlanExerciseWithName[]> {
+    const workoutPlanExercises = await this.prisma.workoutPlanExercise.findMany(
+      {
+        where: {
+          workoutPlanId,
+          weekDay,
+        },
+        include: {
+          exercise: true,
+        },
+      },
+    )
+
+    return workoutPlanExercises.map(
+      PrismaWorkoutPlanExerciseWithNameMapper.toDomain,
+    )
   }
 
   async create(workoutPlanExercise: WorkoutPlanExercise): Promise<void> {

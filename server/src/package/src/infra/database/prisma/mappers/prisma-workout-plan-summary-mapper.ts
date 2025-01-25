@@ -1,11 +1,12 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Slug } from '@/domains/workout/enterprise/entities/value-objects/slug'
-import { WorkoutPlanSummary } from '@/domains/workout/enterprise/entities/value-objects/workout-plan-summary'
 import {
   WorkoutPlan as PrismaWorkoutPlan,
   User as PrismaUser,
   WorkoutPlanExercise as PrismaWorkoutPlanExercise,
 } from '@prisma/client'
+
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Slug } from '@/domains/workout/enterprise/entities/value-objects/slug'
+import { WorkoutPlanSummary } from '@/domains/workout/enterprise/entities/value-objects/workout-plan-summary'
 
 type PrismaWorkoutPlanSummary = PrismaWorkoutPlan & {
   author: PrismaUser

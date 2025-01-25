@@ -1,9 +1,10 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { WorkoutPlanExercise } from '@/domains/workout/enterprise/entities/workout-plan-exercise'
 import {
   Prisma,
   WorkoutPlanExercise as PrismaWorkoutPlanExercise,
 } from '@prisma/client'
+
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { WorkoutPlanExercise } from '@/domains/workout/enterprise/entities/workout-plan-exercise'
 
 export class PrismaWorkoutPlanExerciseMapper {
   static toDomain(raw: PrismaWorkoutPlanExercise): WorkoutPlanExercise {
