@@ -5,7 +5,7 @@ import { WorkoutPlansRepository } from '../repositories/workout-plans-repository
 import { Injectable } from '@nestjs/common'
 
 interface DeleteWorkoutPlanUseCaseRequest {
-  ownerId: string
+  authorId: string
   workoutPlanId: string
 }
 
@@ -19,7 +19,7 @@ export class DeleteWorkoutPlanUseCase {
   constructor(private workoutPlansRepository: WorkoutPlansRepository) {}
 
   async execute({
-    ownerId,
+    authorId,
     workoutPlanId,
   }: DeleteWorkoutPlanUseCaseRequest): Promise<DeleteWorkoutPlanUseCaseResponse> {
     const workoutPlan =
@@ -29,7 +29,7 @@ export class DeleteWorkoutPlanUseCase {
       return left(new ResourceNotFoundError())
     }
 
-    if (workoutPlan?.ownerId.toString() !== ownerId) {
+    if (workoutPlan?.authorId.toString() !== authorId) {
       return left(new NotAllowedError())
     }
 

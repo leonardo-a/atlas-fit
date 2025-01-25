@@ -7,7 +7,8 @@ export class PrismaWorkoutPlanMapper {
   static toDomain(raw: PrismaWorkoutPlan): WorkoutPlan {
     return WorkoutPlan.create(
       {
-        ownerId: new UniqueEntityID(raw.ownerId),
+        studentId: new UniqueEntityID(raw.studentId),
+        authorId: new UniqueEntityID(raw.authorId),
         title: raw.title,
         createdAt: raw.createdAt,
         slug: Slug.create(raw.slug),
@@ -22,7 +23,8 @@ export class PrismaWorkoutPlanMapper {
   ): Prisma.WorkoutPlanUncheckedCreateInput {
     return {
       id: workoutPlan.id.toString(),
-      ownerId: workoutPlan.ownerId.toString(),
+      studentId: workoutPlan.studentId.toString(),
+      authorId: workoutPlan.authorId.toString(),
       title: workoutPlan.title,
       slug: workoutPlan.slug.value,
       createdAt: workoutPlan.createdAt,

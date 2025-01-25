@@ -39,13 +39,13 @@ describe('Create Workout Plan (E2E)', () => {
 
     const accessToken = jwt.sign({ sub: user.id.toString(), role: user.role })
 
-    const ownerId = student.id.toString()
+    const studentId = student.id.toString()
 
     const response = await request(app.getHttpServer())
       .post('/workout-plan')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        ownerId,
+        studentId,
         title: 'My Workout',
       })
 
@@ -58,6 +58,6 @@ describe('Create Workout Plan (E2E)', () => {
     })
 
     expect(workoutPlanOnDatabase).toBeTruthy()
-    expect(workoutPlanOnDatabase?.ownerId).toEqual(ownerId)
+    expect(workoutPlanOnDatabase?.studentId).toEqual(studentId)
   })
 })

@@ -10,8 +10,8 @@ import { WorkoutPlanAlreadyExistsError } from './errors/workout-plan-already-exi
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
 interface CreateWorkoutPlanUseCaseRequest {
-  userId: string
-  ownerId: string
+  authorId: string
+  studentId: string
   title: string
 }
 
@@ -30,19 +30,20 @@ export class CreateWorkoutPlanUseCase {
   ) {}
 
   async execute({
-    userId,
-    ownerId,
+    authorId,
+    studentId,
     title,
   }: CreateWorkoutPlanUseCaseRequest): Promise<CreateWorkoutPlanUseCaseResponse> {
     const personalTrainer =
-      await this.personalTrainersRepository.findById(userId)
+      await this.personalTrainersRepository.findById(authorId)
 
     if (!personalTrainer) {
       return left(new NotAllowedError())
     }
 
     const workoutPlan = WorkoutPlan.create({
-      ownerId: new UniqueEntityID(ownerId),
+      authorId: new UniqueEntityID(authorId),
+      studentId: new UniqueEntityID(studentId),
       title,
       exercises: new WorkoutPlanExerciseList([]),
     })

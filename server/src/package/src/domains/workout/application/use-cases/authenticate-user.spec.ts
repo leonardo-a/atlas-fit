@@ -1,11 +1,11 @@
 import { FakeEncrypter } from 'test/cryptography/fake-encrypter'
 import { FakeHasher } from 'test/cryptography/fake-hasher'
+import { makePersonalTrainer } from 'test/factories/make-personal-trainer'
+import { makeStudent } from 'test/factories/make-student'
+import { InMemoryPersonalTrainersRepository } from 'test/repositories/in-memory-personal-trainers-repository'
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
 import { AuthenticateUserUseCase } from './authenticate-user'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
-import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
-import { InMemoryPersonalTrainersRepository } from 'test/repositories/in-memory-personal-trainers-repository'
-import { makeStudent } from 'test/factories/make-student'
-import { makePersonalTrainer } from 'test/factories/make-personal-trainer'
 
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryPersonalTrainersRepository: InMemoryPersonalTrainersRepository

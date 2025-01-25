@@ -18,7 +18,7 @@ import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
 const createWorkoutPlanBodySchema = z.object({
   title: z.string(),
-  ownerId: z.string().uuid(),
+  studentId: z.string().uuid(),
 })
 
 type CreateWorkoutPlanBodySchema = z.infer<typeof createWorkoutPlanBodySchema>
@@ -35,14 +35,14 @@ export class CreateWorkoutPlanController {
     @Body(bodyValidationPipe) body: CreateWorkoutPlanBodySchema,
     @CurrentUser() user: UserPayload,
   ) {
-    const { title, ownerId } = body
+    const { title, studentId } = body
 
-    const userId = user.sub
+    const authorId = user.sub
 
     const result = await this.createWorkoutPlan.execute({
       title,
-      userId,
-      ownerId,
+      authorId,
+      studentId,
     })
 
     if (result.isLeft()) {

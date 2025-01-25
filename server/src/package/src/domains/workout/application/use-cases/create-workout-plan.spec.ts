@@ -1,11 +1,15 @@
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
+import { makePersonalTrainer } from 'test/factories/make-personal-trainer'
+import { InMemoryExercisesRepository } from 'test/repositories/in-memory-exercises-repository'
 import { InMemoryPersonalTrainersRepository } from 'test/repositories/in-memory-personal-trainers-repository'
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
 import { InMemoryWorkoutPlanExercisesRepository } from 'test/repositories/in-memory-workout-plan-exercises-repository'
 import { InMemoryWorkoutPlansRepository } from 'test/repositories/in-memory-workout-plans-repository'
 import { CreateWorkoutPlanUseCase } from './create-workout-plan'
-import { makePersonalTrainer } from 'test/factories/make-personal-trainer'
-import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
 let inMemoryPersonalTrainersRepository: InMemoryPersonalTrainersRepository
+let inMemoryStudentsRepository: InMemoryStudentsRepository
+let inMemoryExercisesRepository: InMemoryExercisesRepository
 let inMemoryWorkoutPlansRepository: InMemoryWorkoutPlansRepository
 let inMemoryWorkoutPlanExercisesRepository: InMemoryWorkoutPlanExercisesRepository
 let sut: CreateWorkoutPlanUseCase
@@ -14,10 +18,18 @@ describe('Create Workout Plan Use Case', () => {
   beforeEach(() => {
     inMemoryPersonalTrainersRepository =
       new InMemoryPersonalTrainersRepository()
+
+    inMemoryStudentsRepository = new InMemoryStudentsRepository()
+
+    inMemoryExercisesRepository = new InMemoryExercisesRepository()
+
     inMemoryWorkoutPlanExercisesRepository =
-      new InMemoryWorkoutPlanExercisesRepository()
+      new InMemoryWorkoutPlanExercisesRepository(inMemoryExercisesRepository)
+
     inMemoryWorkoutPlansRepository = new InMemoryWorkoutPlansRepository(
       inMemoryWorkoutPlanExercisesRepository,
+      inMemoryPersonalTrainersRepository,
+      inMemoryStudentsRepository,
     )
 
     sut = new CreateWorkoutPlanUseCase(
@@ -31,11 +43,11 @@ describe('Create Workout Plan Use Case', () => {
 
     inMemoryPersonalTrainersRepository.items.push(personalTrainer)
 
-    const userId = personalTrainer.id.toString()
+    const authorId = personalTrainer.id.toString()
 
     const response = await sut.execute({
-      userId,
-      ownerId: 'user-1',
+      authorId,
+      studentId: 'user-1',
       title: 'My Workout Plan',
     })
 
@@ -45,8 +57,8 @@ describe('Create Workout Plan Use Case', () => {
 
   it('should not be able to a stundet create a workout plan', async () => {
     const response = await sut.execute({
-      userId: 'user-1',
-      ownerId: 'user-1',
+      authorId: 'user-1',
+      studentId: 'user-1',
       title: 'My Workout Plan',
     })
 

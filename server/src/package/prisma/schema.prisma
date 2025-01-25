@@ -20,7 +20,8 @@ model User {
   password String
   role     Roles  @default(STUDENT)
 
-  workoutPlans WorkoutPlan[]
+  authorWorkoutPlans  WorkoutPlan[] @relation("user_author")
+  studentWorkoutPlans WorkoutPlan[] @relation("user_student")
 
   @@map("users")
 }
@@ -37,14 +38,17 @@ model Exercise {
 }
 
 model WorkoutPlan {
-  id        String    @id @default(uuid())
-  title     String
-  slug      String    @unique
-  ownerId   String    @map("owner_id")
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
+  id          String    @id @default(uuid())
+  title       String
+  slug        String    @unique
+  description String?
+  studentId   String    @map("student_id")
+  authorId    String    @map("author_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
 
-  owner                User                  @relation(fields: [ownerId], references: [id])
+  author               User                  @relation(name: "user_author", fields: [authorId], references: [id])
+  student              User                  @relation(name: "user_student", fields: [studentId], references: [id])
   workoutPlanExercises WorkoutPlanExercise[]
 
   @@map("workout_plans")

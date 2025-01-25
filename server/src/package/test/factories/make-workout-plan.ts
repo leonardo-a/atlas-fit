@@ -16,7 +16,9 @@ export function makeWorkoutPlan(
   const workoutPlan = WorkoutPlan.create(
     {
       title: faker.word.adjective(),
-      ownerId: new UniqueEntityID(),
+      authorId: new UniqueEntityID(),
+      studentId: new UniqueEntityID(),
+      description: faker.lorem.paragraph(),
       ...override,
     },
     id,

@@ -1,17 +1,19 @@
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { makeExercise } from 'test/factories/make-exercise'
+import { makePersonalTrainer } from 'test/factories/make-personal-trainer'
 import { makeWorkoutPlan } from 'test/factories/make-workout-plan'
 import { makeWorkoutPlanExercise } from 'test/factories/make-workout-plan-exercise'
 import { InMemoryExercisesRepository } from 'test/repositories/in-memory-exercises-repository'
 import { InMemoryPersonalTrainersRepository } from 'test/repositories/in-memory-personal-trainers-repository'
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
 import { InMemoryWorkoutPlanExercisesRepository } from 'test/repositories/in-memory-workout-plan-exercises-repository'
 import { InMemoryWorkoutPlansRepository } from 'test/repositories/in-memory-workout-plans-repository'
 import { AssignExerciseToWorkoutPlanUseCase } from './assign-exercise-to-workout-plan'
 import { ExerciseLimitReachedError } from './errors/exercise-limit-reached-error'
 import { WorkoutPlanExerciseAlreadyExistsOnWeekDayError } from './errors/workout-plan-exercise-already-exists-on-week-day-error'
-import { makePersonalTrainer } from 'test/factories/make-personal-trainer'
 
 let inMemoryPersonalTrainersRepository: InMemoryPersonalTrainersRepository
+let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryWorkoutPlanExercisesRepository: InMemoryWorkoutPlanExercisesRepository
 let inMemoryWorkoutPlansRepository: InMemoryWorkoutPlansRepository
 let inMemoryExercisesRepository: InMemoryExercisesRepository
@@ -21,11 +23,18 @@ describe('Assign Exercise To Workout Plan Use Case', () => {
   beforeEach(() => {
     inMemoryPersonalTrainersRepository =
       new InMemoryPersonalTrainersRepository()
+
+    inMemoryStudentsRepository = new InMemoryStudentsRepository()
+
     inMemoryExercisesRepository = new InMemoryExercisesRepository()
+
     inMemoryWorkoutPlanExercisesRepository =
-      new InMemoryWorkoutPlanExercisesRepository()
+      new InMemoryWorkoutPlanExercisesRepository(inMemoryExercisesRepository)
+
     inMemoryWorkoutPlansRepository = new InMemoryWorkoutPlansRepository(
       inMemoryWorkoutPlanExercisesRepository,
+      inMemoryPersonalTrainersRepository,
+      inMemoryStudentsRepository,
     )
 
     sut = new AssignExerciseToWorkoutPlanUseCase(

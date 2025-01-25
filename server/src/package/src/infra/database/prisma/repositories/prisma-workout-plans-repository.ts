@@ -1,13 +1,41 @@
 import { Injectable } from '@nestjs/common'
 
-import { WorkoutPlansRepository } from '@/domains/workout/application/repositories/workout-plans-repository'
+import {
+  WorkoutPlansFilterParams,
+  WorkoutPlansRepository,
+} from '@/domains/workout/application/repositories/workout-plans-repository'
 import { WorkoutPlan } from '@/domains/workout/enterprise/entities/workout-plan'
 import { PrismaWorkoutPlanMapper } from '../mappers/prisma-workout-plan-mapper'
 import { PrismaService } from '../prisma.service'
+import { WorkoutPlanSummary } from '@/domains/workout/enterprise/entities/value-objects/workout-plan-summary'
+import { PrismaWorkoutPlanSummaryMapper } from '../mappers/prisma-workout-plan-summary-mapper'
 
 @Injectable()
 export class PrismaWorkoutPlansRepository implements WorkoutPlansRepository {
   constructor(private prisma: PrismaService) {}
+
+  async findMany({
+    page,
+    query,
+    studentId,
+  }: WorkoutPlansFilterParams): Promise<WorkoutPlanSummary[]> {
+    const workoutPlans = await this.prisma.workoutPlan.findMany({
+      where: {
+        title: {
+          contains: query,
+        },
+        studentId: studentId ?? { contains: '' },
+      },
+      take: 20,
+      skip: (page - 1) * 20,
+      include: {
+        author: true,
+        workoutPlanExercises: true,
+      },
+    })
+
+    return workoutPlans.map(PrismaWorkoutPlanSummaryMapper.toDomain)
+  }
 
   async findBySlug(slug: string): Promise<WorkoutPlan | null> {
     const workoutPlan = await this.prisma.workoutPlan.findUnique({
