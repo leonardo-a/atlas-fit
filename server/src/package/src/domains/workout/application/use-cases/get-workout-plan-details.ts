@@ -7,7 +7,7 @@ import { WorkoutPlanWithDetails } from '../../enterprise/entities/value-objects/
 import { WorkoutPlansRepository } from '../repositories/workout-plans-repository'
 
 interface GetWorkoutPlanDetailsUseCaseRequest {
-  slug: string
+  id: string
   userId: string
 }
 
@@ -21,11 +21,11 @@ export class GetWorkoutPlanDetailsUseCase {
   constructor(private workoutPlansRepository: WorkoutPlansRepository) {}
 
   async execute({
-    slug,
+    id,
     userId,
   }: GetWorkoutPlanDetailsUseCaseRequest): Promise<GetWorkoutPlanDetailsUseCaseResponse> {
     const workoutPlan =
-      await this.workoutPlansRepository.findBySlugWithDetails(slug)
+      await this.workoutPlansRepository.findByIdWithDetails(id)
 
     if (!workoutPlan) {
       return left(new ResourceNotFoundError())

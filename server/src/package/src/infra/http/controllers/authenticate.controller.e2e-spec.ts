@@ -5,8 +5,8 @@ import request from 'supertest'
 
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
-import { StudentFactory } from 'test/factories/make-student'
 import { PersonalTrainerFactory } from 'test/factories/make-personal-trainer'
+import { StudentFactory } from 'test/factories/make-student'
 
 describe('Authenticate (E2E)', () => {
   let app: INestApplication

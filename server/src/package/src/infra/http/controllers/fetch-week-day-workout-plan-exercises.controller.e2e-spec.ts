@@ -5,18 +5,18 @@ import request from 'supertest'
 
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { ExerciseFactory } from 'test/factories/make-exercise'
 import { PersonalTrainerFactory } from 'test/factories/make-personal-trainer'
 import { StudentFactory } from 'test/factories/make-student'
 import { WorkoutPlanFactory } from 'test/factories/make-workout-plan'
+import { WorkoutPlanExerciseFactory } from 'test/factories/make-workout-plan-exercise'
 
-describe('Assign Exercise to Workout Plan (E2E)', () => {
+describe('Fetch Week Day Workout Plan Exercises (E2E)', () => {
   let app: INestApplication
-  let prisma: PrismaService
   let personalTrainerFactory: PersonalTrainerFactory
   let studentFactory: StudentFactory
   let workoutPlanFactory: WorkoutPlanFactory
+  let workoutPlanExerciseFactory: WorkoutPlanExerciseFactory
   let exerciseFactory: ExerciseFactory
   let jwt: JwtService
 
@@ -25,26 +25,27 @@ describe('Assign Exercise to Workout Plan (E2E)', () => {
       imports: [AppModule, DatabaseModule],
       providers: [
         PersonalTrainerFactory,
-        WorkoutPlanFactory,
-        ExerciseFactory,
         StudentFactory,
+        ExerciseFactory,
+        WorkoutPlanFactory,
+        WorkoutPlanExerciseFactory,
       ],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
-    prisma = moduleRef.get(PrismaService)
     personalTrainerFactory = moduleRef.get(PersonalTrainerFactory)
     studentFactory = moduleRef.get(StudentFactory)
     exerciseFactory = moduleRef.get(ExerciseFactory)
     workoutPlanFactory = moduleRef.get(WorkoutPlanFactory)
+    workoutPlanExerciseFactory = moduleRef.get(WorkoutPlanExerciseFactory)
 
     jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
-  test('[POST] /workout-plans/:workoutPlanId/exercises', async () => {
+  test('[GET] /workout-plans/:workoutPlanId/exercises', async () => {
     const author = await personalTrainerFactory.makePrismaPersonalTrainer()
     const student = await studentFactory.makePrismaStudent()
 
@@ -57,32 +58,47 @@ describe('Assign Exercise to Workout Plan (E2E)', () => {
       authorId: author.id,
       studentId: student.id,
     })
-    const exercise = await exerciseFactory.makePrismaExercise({
+
+    const exercise1 = await exerciseFactory.makePrismaExercise({
       name: 'Bench Press',
     })
 
+    const exercise2 = await exerciseFactory.makePrismaExercise({
+      name: 'Squat',
+    })
+
+    await workoutPlanExerciseFactory.makePrismaWorkoutPlanExercise({
+      exerciseId: exercise1.id,
+      workoutPlanId: workoutPlan.id,
+      weekDay: 1,
+    })
+
+    await workoutPlanExerciseFactory.makePrismaWorkoutPlanExercise({
+      exerciseId: exercise2.id,
+      workoutPlanId: workoutPlan.id,
+      weekDay: 2,
+    })
+
     const workoutPlanId = workoutPlan.id.toString()
-    const exerciseId = exercise.id.toString()
 
     const response = await request(app.getHttpServer())
-      .post(`/workout-plans/${workoutPlanId}/exercises`)
+      .get(`/workout-plans/${workoutPlanId}/exercises`)
+      .query({
+        weekDay: 2,
+      })
       .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        exerciseId,
-        repetitions: 10,
-        sets: 4,
-        weekDay: 1,
-      })
+      .send()
 
-    expect(response.statusCode).toBe(201)
-
-    const workoutPlanExerciseOnDatabase =
-      await prisma.workoutPlanExercise.findFirst({
-        where: {
-          exerciseId,
-        },
-      })
-
-    expect(workoutPlanExerciseOnDatabase).toBeTruthy()
+    expect(response.statusCode).toBe(200)
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        weekDayExercises: expect.arrayContaining([
+          expect.objectContaining({
+            name: 'Squat',
+          }),
+        ]),
+      }),
+    )
+    expect(response.body.weekDayExercises).toHaveLength(1)
   })
 })

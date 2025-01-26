@@ -1,10 +1,10 @@
+import { Injectable } from '@nestjs/common'
+
 import { Either, left, right } from '@/core/either'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { WorkoutPlanExercisesRepository } from '../repositories/workout-plan-exercises-repository'
 import { WorkoutPlansRepository } from '../repositories/workout-plans-repository'
-import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-import { Injectable } from '@nestjs/common'
-import { PersonalTrainersRepository } from '../repositories/personal-trainers-repository'
 
 interface RemoveExerciseFromWorkoutPlanUseCaseRequest {
   authorId: string
@@ -19,7 +19,6 @@ type RemoveExerciseFromWorkoutPlanUseCaseResponse = Either<
 @Injectable()
 export class RemoveExerciseFromWorkoutPlanUseCase {
   constructor(
-    private personalTrainersRepository: PersonalTrainersRepository,
     private workoutPlanExercisesRepostiory: WorkoutPlanExercisesRepository,
     private workoutPlansRepository: WorkoutPlansRepository,
   ) {}
@@ -28,12 +27,6 @@ export class RemoveExerciseFromWorkoutPlanUseCase {
     workoutPlanExerciseId,
     authorId,
   }: RemoveExerciseFromWorkoutPlanUseCaseRequest): Promise<RemoveExerciseFromWorkoutPlanUseCaseResponse> {
-    const author = await this.personalTrainersRepository.findById(authorId)
-
-    if (!author) {
-      return left(new NotAllowedError())
-    }
-
     const workoutPlanExercise =
       await this.workoutPlanExercisesRepostiory.findById(workoutPlanExerciseId)
 
@@ -47,6 +40,10 @@ export class RemoveExerciseFromWorkoutPlanUseCase {
 
     if (!workoutPlan) {
       return left(new ResourceNotFoundError())
+    }
+
+    if (workoutPlan.authorId.toString() !== authorId) {
+      return left(new NotAllowedError())
     }
 
     await this.workoutPlanExercisesRepostiory.delete(workoutPlanExercise)

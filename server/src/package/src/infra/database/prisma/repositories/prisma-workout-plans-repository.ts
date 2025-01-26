@@ -25,6 +25,7 @@ export class PrismaWorkoutPlansRepository implements WorkoutPlansRepository {
       where: {
         title: {
           contains: query,
+          mode: 'insensitive',
         },
         studentId: studentId ?? { contains: '' },
       },
@@ -73,6 +74,26 @@ export class PrismaWorkoutPlansRepository implements WorkoutPlansRepository {
     const workoutPlan = await this.prisma.workoutPlan.findUnique({
       where: {
         slug,
+      },
+      include: {
+        author: true,
+        student: true,
+      },
+    })
+
+    if (!workoutPlan) {
+      return null
+    }
+
+    return PrismaWorkoutPlanWithDetailsMapper.toDomain(workoutPlan)
+  }
+
+  async findByIdWithDetails(
+    id: string,
+  ): Promise<WorkoutPlanWithDetails | null> {
+    const workoutPlan = await this.prisma.workoutPlan.findUnique({
+      where: {
+        id,
       },
       include: {
         author: true,

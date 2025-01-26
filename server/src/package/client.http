@@ -1,5 +1,7 @@
 @baseUrl = http://localhost:3333
 @authToken = {{authenticate.response.body.access_token}}
+@workoutPlanId = 915e48a1-da31-4793-9061-0465e59903c2
+@exerciseId = 4526274a-7fea-4321-bdb8-7b50a3fb03ae
 
 # @name create_account
 POST {{baseUrl}}/accounts
@@ -7,7 +9,7 @@ Content-Type: application/json
 
 {
   "name": "Leonardo Leal",
-  "email": "leonardoa.dev@gmail.com",
+  "email": "leonardoa.dev1@gmail.com",
   "password": "123456"
 }
 
@@ -25,10 +27,64 @@ Content-Type: application/json
 ###
 
 # @name create_workout_plan
-POST {{baseUrl}}/workout-plan
+POST {{baseUrl}}/workout-plans
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "title": "My Workout!"
+  "title": "My Workout!",
+  "studentId": "e05cb3fe-8b3f-4e3d-bed8-ec66d1a374ad" 
 }
+
+###
+
+# @name create_exercise
+POST {{baseUrl}}/exercises
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Bench press"
+}
+
+###
+
+# @name assign_exercise_to_workout_plan
+POST {{baseUrl}}/workout-plans/{{workoutPlanId}}/exercises
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "exerciseId": "4526274a-7fea-4321-bdb8-7b50a3fb03ae",
+  "repetitions": 12,
+  "sets": 4,
+  "weekDay": 1
+}
+
+###
+
+# @name fetch_workout_plans
+GET {{baseUrl}}/workout-plans
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "exerciseId": "4526274a-7fea-4321-bdb8-7b50a3fb03ae",
+  "repetitions": 12,
+  "sets": 4,
+  "weekDay": 1
+}
+
+###
+
+# @name fetch_week_day_workout_plan_exercises
+GET {{baseUrl}}/workout-plans/{{workoutPlanId}}/exercises?weekDay=1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name get_workout_plan_details
+GET {{baseUrl}}/workout-plans/{{workoutPlanId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}

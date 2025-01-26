@@ -10,13 +10,15 @@ import { ExerciseFactory } from 'test/factories/make-exercise'
 import { PersonalTrainerFactory } from 'test/factories/make-personal-trainer'
 import { StudentFactory } from 'test/factories/make-student'
 import { WorkoutPlanFactory } from 'test/factories/make-workout-plan'
+import { WorkoutPlanExerciseFactory } from 'test/factories/make-workout-plan-exercise'
 
-describe('Assign Exercise to Workout Plan (E2E)', () => {
+describe('Remove Exercise from Workout Plan (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let personalTrainerFactory: PersonalTrainerFactory
   let studentFactory: StudentFactory
   let workoutPlanFactory: WorkoutPlanFactory
+  let workoutPlanExerciseFactory: WorkoutPlanExerciseFactory
   let exerciseFactory: ExerciseFactory
   let jwt: JwtService
 
@@ -25,9 +27,10 @@ describe('Assign Exercise to Workout Plan (E2E)', () => {
       imports: [AppModule, DatabaseModule],
       providers: [
         PersonalTrainerFactory,
-        WorkoutPlanFactory,
-        ExerciseFactory,
         StudentFactory,
+        ExerciseFactory,
+        WorkoutPlanFactory,
+        WorkoutPlanExerciseFactory,
       ],
     }).compile()
 
@@ -38,13 +41,14 @@ describe('Assign Exercise to Workout Plan (E2E)', () => {
     studentFactory = moduleRef.get(StudentFactory)
     exerciseFactory = moduleRef.get(ExerciseFactory)
     workoutPlanFactory = moduleRef.get(WorkoutPlanFactory)
+    workoutPlanExerciseFactory = moduleRef.get(WorkoutPlanExerciseFactory)
 
     jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
-  test('[POST] /workout-plans/:workoutPlanId/exercises', async () => {
+  test('[DELETE] /workout-plans/exercises/:workoutPlanExerciseId', async () => {
     const author = await personalTrainerFactory.makePrismaPersonalTrainer()
     const student = await studentFactory.makePrismaStudent()
 
@@ -57,32 +61,33 @@ describe('Assign Exercise to Workout Plan (E2E)', () => {
       authorId: author.id,
       studentId: student.id,
     })
+
     const exercise = await exerciseFactory.makePrismaExercise({
       name: 'Bench Press',
     })
 
-    const workoutPlanId = workoutPlan.id.toString()
-    const exerciseId = exercise.id.toString()
-
-    const response = await request(app.getHttpServer())
-      .post(`/workout-plans/${workoutPlanId}/exercises`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        exerciseId,
-        repetitions: 10,
-        sets: 4,
-        weekDay: 1,
+    const workoutPlanExercise =
+      await workoutPlanExerciseFactory.makePrismaWorkoutPlanExercise({
+        exerciseId: exercise.id,
+        workoutPlanId: workoutPlan.id,
       })
 
-    expect(response.statusCode).toBe(201)
+    const workoutPlanExerciseId = workoutPlanExercise.id.toString()
+
+    const response = await request(app.getHttpServer())
+      .delete(`/workout-plans/exercises/${workoutPlanExerciseId}`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+
+    expect(response.statusCode).toBe(204)
 
     const workoutPlanExerciseOnDatabase =
-      await prisma.workoutPlanExercise.findFirst({
+      await prisma.workoutPlanExercise.findUnique({
         where: {
-          exerciseId,
+          id: workoutPlanExerciseId,
         },
       })
 
-    expect(workoutPlanExerciseOnDatabase).toBeTruthy()
+    expect(workoutPlanExerciseOnDatabase).toBeNull()
   })
 })

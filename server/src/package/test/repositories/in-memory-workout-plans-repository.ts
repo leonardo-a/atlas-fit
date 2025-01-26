@@ -135,6 +135,47 @@ export class InMemoryWorkoutPlansRepository implements WorkoutPlansRepository {
     return workoutPlanWithDetails
   }
 
+  async findByIdWithDetails(
+    slug: string,
+  ): Promise<WorkoutPlanWithDetails | null> {
+    const workoutPlan = this.items.find((item) => item.slug.value === slug)
+
+    if (!workoutPlan) {
+      return null
+    }
+
+    const author = this.personalTrainersRepository.items.find((item) =>
+      item.id.equals(workoutPlan.authorId),
+    )
+
+    if (!author) {
+      throw new Error('Author not found.')
+    }
+
+    const student = this.studentsRepository.items.find((item) =>
+      item.id.equals(workoutPlan.studentId),
+    )
+
+    if (!student) {
+      throw new Error('Student not found.')
+    }
+
+    const workoutPlanWithDetails = WorkoutPlanWithDetails.create({
+      id: workoutPlan.id,
+      title: workoutPlan.title,
+      slug: workoutPlan.slug,
+      description: workoutPlan.description,
+      authorId: workoutPlan.authorId,
+      author: author.name,
+      studentId: workoutPlan.studentId,
+      student: student.name,
+      createdAt: workoutPlan.createdAt,
+      updatedAt: workoutPlan.updatedAt,
+    })
+
+    return workoutPlanWithDetails
+  }
+
   async create(workoutPlan: WorkoutPlan): Promise<void> {
     this.items.push(workoutPlan)
 

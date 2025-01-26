@@ -17,7 +17,7 @@ type FetchWotkoutPlansUseCaseResponse = Either<
 >
 
 @Injectable()
-export class FetchWotkoutPlansUseCase {
+export class FetchWorkoutPlansUseCase {
   constructor(private workoutPlansRepository: WorkoutPlansRepository) {}
 
   async execute({

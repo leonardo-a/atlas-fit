@@ -35,7 +35,6 @@ describe('Remove Exercise From Workout Plan Use Case', () => {
     )
 
     sut = new RemoveExerciseFromWorkoutPlanUseCase(
-      inMemoryPersonalTrainersRepository,
       inMemoryWorkoutPlanExercisesRepository,
       inMemoryWorkoutPlansRepository,
     )

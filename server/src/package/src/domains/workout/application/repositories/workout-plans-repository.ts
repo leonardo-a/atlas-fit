@@ -21,6 +21,10 @@ export abstract class WorkoutPlansRepository {
     slug: string,
   ): Promise<WorkoutPlanWithDetails | null>
 
+  abstract findByIdWithDetails(
+    id: string,
+  ): Promise<WorkoutPlanWithDetails | null>
+
   abstract create(workoutPlan: WorkoutPlan): Promise<void>
 
   abstract save(workoutPlan: WorkoutPlan): Promise<void>

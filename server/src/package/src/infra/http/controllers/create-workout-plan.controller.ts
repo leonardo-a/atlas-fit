@@ -25,7 +25,7 @@ type CreateWorkoutPlanBodySchema = z.infer<typeof createWorkoutPlanBodySchema>
 
 const bodyValidationPipe = new ZodValidationPipe(createWorkoutPlanBodySchema)
 
-@Controller('/workout-plan')
+@Controller('/workout-plans')
 export class CreateWorkoutPlanController {
   constructor(private createWorkoutPlan: CreateWorkoutPlanUseCase) {}
 

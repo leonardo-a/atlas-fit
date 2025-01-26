@@ -76,12 +76,16 @@ export class WorkoutPlan extends AggregateRoot<WorkoutPlanProps> {
     props: Optional<WorkoutPlanProps, 'createdAt' | 'slug' | 'exercises'>,
     id?: UniqueEntityID,
   ) {
+    const timestamp = new Date().getTime()
+
     const workoutplan = new WorkoutPlan(
       {
         ...props,
         createdAt: props.createdAt ?? new Date(),
         exercises: props.exercises ?? new WorkoutPlanExerciseList(),
-        slug: props.slug ?? Slug.createFromText(props.title),
+        slug:
+          props.slug ??
+          Slug.createFromText(props.title.concat(`-${timestamp}`)),
       },
       id,
     )

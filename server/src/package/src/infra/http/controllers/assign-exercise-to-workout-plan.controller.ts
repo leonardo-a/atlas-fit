@@ -34,7 +34,7 @@ const bodyValidationPipe = new ZodValidationPipe(
   assignExerciseToWorkoutPlanBodySchema,
 )
 
-@Controller('/workout-plan/:workoutPlanId/exercises')
+@Controller('/workout-plans/:workoutPlanId/exercises')
 export class AssignExerciseToWorkoutPlanController {
   constructor(
     private assignExerciseToWorkoutPlan: AssignExerciseToWorkoutPlanUseCase,
