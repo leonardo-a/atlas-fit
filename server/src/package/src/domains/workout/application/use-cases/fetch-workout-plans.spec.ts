@@ -1,18 +1,19 @@
 import { makePersonalTrainer } from 'test/factories/make-personal-trainer'
+import { makeStudent } from 'test/factories/make-student'
 import { makeWorkoutPlan } from 'test/factories/make-workout-plan'
 import { InMemoryExercisesRepository } from 'test/repositories/in-memory-exercises-repository'
 import { InMemoryPersonalTrainersRepository } from 'test/repositories/in-memory-personal-trainers-repository'
 import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
 import { InMemoryWorkoutPlanExercisesRepository } from 'test/repositories/in-memory-workout-plan-exercises-repository'
 import { InMemoryWorkoutPlansRepository } from 'test/repositories/in-memory-workout-plans-repository'
-import { FetchWotkoutPlansUseCase } from './fetch-workout-plans'
+import { FetchWorkoutPlansUseCase } from './fetch-workout-plans'
 
 let inMemoryPersonalTrainersRepository: InMemoryPersonalTrainersRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryExercisesRepository: InMemoryExercisesRepository
 let inMemoryWorkoutPlansRepository: InMemoryWorkoutPlansRepository
 let inMemoryWorkoutPlanExercisesRepository: InMemoryWorkoutPlanExercisesRepository
-let sut: FetchWotkoutPlansUseCase
+let sut: FetchWorkoutPlansUseCase
 
 describe('Fetch Workout Plans Use Case', () => {
   beforeEach(() => {
@@ -32,7 +33,7 @@ describe('Fetch Workout Plans Use Case', () => {
       inMemoryStudentsRepository,
     )
 
-    sut = new FetchWotkoutPlansUseCase(inMemoryWorkoutPlansRepository)
+    sut = new FetchWorkoutPlansUseCase(inMemoryWorkoutPlansRepository)
   })
 
   it('should be able to fetch students workout plans', async () => {
@@ -88,6 +89,43 @@ describe('Fetch Workout Plans Use Case', () => {
       expect.objectContaining({
         slug: workoutPlan1.slug,
       }),
+    )
+  })
+
+  it('should be able to fetch paginated workout plans', async () => {
+    const personalTrainer = makePersonalTrainer()
+    const student = makeStudent()
+
+    for (let i = 1; i <= 22; i++) {
+      inMemoryWorkoutPlansRepository.items.push(
+        makeWorkoutPlan({
+          authorId: personalTrainer.id,
+          studentId: student.id,
+          title: `Workout Plan ${i}`,
+        }),
+      )
+    }
+
+    inMemoryPersonalTrainersRepository.items.push(personalTrainer)
+    inMemoryStudentsRepository.items.push(student)
+
+    const response = await sut.execute({
+      page: 2,
+      query: '',
+      authorId: personalTrainer.id.toString(),
+    })
+
+    expect(response.isRight()).toBeTruthy()
+    expect(response.value?.workoutPlans).toHaveLength(2)
+    expect(response.value?.workoutPlans).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          title: 'Workout Plan 21',
+        }),
+        expect.objectContaining({
+          title: 'Workout Plan 22',
+        }),
+      ]),
     )
   })
 })

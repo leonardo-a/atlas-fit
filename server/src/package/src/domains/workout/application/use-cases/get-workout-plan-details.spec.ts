@@ -53,7 +53,7 @@ describe('Get Workout Plan Details Use Case', () => {
     inMemoryWorkoutPlansRepository.items.push(workoutPlan)
 
     const response = await sut.execute({
-      slug: workoutPlan.slug.value,
+      id: workoutPlan.id.toString(),
       userId: personalTrainer.id.toString(),
     })
 
@@ -82,7 +82,7 @@ describe('Get Workout Plan Details Use Case', () => {
     inMemoryWorkoutPlansRepository.items.push(workoutPlan)
 
     const response = await sut.execute({
-      slug: workoutPlan.slug.value,
+      id: workoutPlan.id.toString(),
       userId: student.id.toString(),
     })
 
@@ -111,7 +111,7 @@ describe('Get Workout Plan Details Use Case', () => {
     inMemoryWorkoutPlansRepository.items.push(workoutPlan)
 
     const response = await sut.execute({
-      slug: workoutPlan.slug.value,
+      id: workoutPlan.id.toString(),
       userId: 'user-1',
     })
 
@@ -121,7 +121,7 @@ describe('Get Workout Plan Details Use Case', () => {
 
   it('should not be able to get non existent workout plan details', async () => {
     const response = await sut.execute({
-      slug: 'invalid-workout-plan-slug',
+      id: 'invalid-workout-plan-slug',
       userId: 'user-1',
     })
 

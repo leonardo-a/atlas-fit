@@ -33,7 +33,7 @@ export class FetchWorkoutPlansController {
   ) {
     const { page, query } = queryParams
 
-    const workoutPlans = await this.fetchWorkoutPlans.execute({
+    const result = await this.fetchWorkoutPlans.execute({
       page,
       query,
       authorId: user.role === 'PERSONAL_TRAINER' ? user.sub : undefined,
@@ -41,7 +41,7 @@ export class FetchWorkoutPlansController {
     })
 
     return {
-      workoutPlans: workoutPlans.value?.workoutPlans.map(
+      workoutPlans: result.value?.workoutPlans.map(
         WorkoutPlanSummaryPresenter.toHTTP,
       ),
     }

@@ -136,9 +136,9 @@ export class InMemoryWorkoutPlansRepository implements WorkoutPlansRepository {
   }
 
   async findByIdWithDetails(
-    slug: string,
+    id: string,
   ): Promise<WorkoutPlanWithDetails | null> {
-    const workoutPlan = this.items.find((item) => item.slug.value === slug)
+    const workoutPlan = this.items.find((item) => item.id.toString() === id)
 
     if (!workoutPlan) {
       return null

@@ -19,11 +19,13 @@ export class PrismaExercisesRepository implements ExercisesRepository {
           {
             name: {
               contains: query,
+              mode: 'insensitive',
             },
           },
           {
             description: {
               contains: query,
+              mode: 'insensitive',
             },
           },
         ],

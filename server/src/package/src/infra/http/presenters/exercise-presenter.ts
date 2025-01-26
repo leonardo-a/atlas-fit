@@ -5,6 +5,7 @@ export class ExercisePresenter {
     return {
       id: exercise.id.toString(),
       name: exercise.name,
+      description: exercise.description,
     }
   }
 }
