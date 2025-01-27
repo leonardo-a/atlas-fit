@@ -3,6 +3,7 @@ import { WorkoutPlanSummary } from '@/domains/workout/enterprise/entities/value-
 export class WorkoutPlanSummaryPresenter {
   static toHTTP(workoutPlanSummary: WorkoutPlanSummary) {
     return {
+      id: workoutPlanSummary.id.toString(),
       slug: workoutPlanSummary.slug.value,
       title: workoutPlanSummary.title,
       author: workoutPlanSummary.author,

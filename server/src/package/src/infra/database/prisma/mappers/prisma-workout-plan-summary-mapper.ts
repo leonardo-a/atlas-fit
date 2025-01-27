@@ -16,6 +16,7 @@ type PrismaWorkoutPlanSummary = PrismaWorkoutPlan & {
 export class PrismaWorkoutPlanSummaryMapper {
   static toDomain(raw: PrismaWorkoutPlanSummary): WorkoutPlanSummary {
     return WorkoutPlanSummary.create({
+      id: new UniqueEntityID(raw.id),
       author: raw.author.name,
       authorId: new UniqueEntityID(raw.authorId),
       title: raw.title,

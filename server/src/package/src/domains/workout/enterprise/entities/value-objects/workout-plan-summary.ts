@@ -3,6 +3,7 @@ import { ValueObject } from '@/core/entities/value-object'
 import { Slug } from './slug'
 
 export interface WorkoutPlanSummaryProps {
+  id: UniqueEntityID
   title: string
   slug: Slug
   description?: string | null
@@ -12,6 +13,10 @@ export interface WorkoutPlanSummaryProps {
 }
 
 export class WorkoutPlanSummary extends ValueObject<WorkoutPlanSummaryProps> {
+  get id() {
+    return this.props.id
+  }
+
   get title() {
     return this.props.title
   }

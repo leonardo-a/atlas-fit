@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  postgres:
+  database:
     container_name: gym-tracker-pg
     image: postgres
     ports:
@@ -13,3 +11,16 @@ services:
       PGDATA: /data/postgres
     volumes:
       - ./data/pg:/data/postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 20s
+      timeout: 3s
+      retries: 5
+  api:
+    container_name: gym-tracker-api
+    build: .
+    ports:
+      - 3333:3333
+    depends_on:
+      database:
+        condition: service_healthy

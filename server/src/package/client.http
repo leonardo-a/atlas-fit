@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:3333
 @authToken = {{authenticate.response.body.access_token}}
-@workoutPlanId = 915e48a1-da31-4793-9061-0465e59903c2
+@workoutPlanId = 2aefb092-f29d-4b87-a9b9-83ec0682b8a6
 @exerciseId = 4526274a-7fea-4321-bdb8-7b50a3fb03ae
 
 # @name create_account
@@ -9,7 +9,7 @@ Content-Type: application/json
 
 {
   "name": "Leonardo Leal",
-  "email": "leonardoa.dev1@gmail.com",
+  "email": "leonardoa.dev@gmail.com",
   "password": "123456"
 }
 
@@ -32,8 +32,9 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "title": "My Workout!",
-  "studentId": "e05cb3fe-8b3f-4e3d-bed8-ec66d1a374ad" 
+  "title": "Peitoral",
+  "description": "Planilha com foco para o desenvolvimento do peito",
+  "studentId": "1456eb27-12be-4866-99c3-4a3ab7e0f19e" 
 }
 
 ###
@@ -44,7 +45,7 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "name": "Bench press"
+  "name": "Triceps corda"
 }
 
 ###
@@ -55,10 +56,10 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "exerciseId": "4526274a-7fea-4321-bdb8-7b50a3fb03ae",
+  "exerciseId": "fc740546-161f-4b51-81b1-10841984d1a6",
   "repetitions": 12,
   "sets": 4,
-  "weekDay": 1
+  "weekDay": 4
 }
 
 ###
@@ -67,13 +68,6 @@ Authorization: Bearer {{authToken}}
 GET {{baseUrl}}/workout-plans
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
-
-{
-  "exerciseId": "4526274a-7fea-4321-bdb8-7b50a3fb03ae",
-  "repetitions": 12,
-  "sets": 4,
-  "weekDay": 1
-}
 
 ###
 

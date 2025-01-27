@@ -62,6 +62,7 @@ export class InMemoryWorkoutPlansRepository implements WorkoutPlansRepository {
         }
 
         return WorkoutPlanSummary.create({
+          id: item.id,
           author: author.name,
           authorId: item.authorId,
           exercises,

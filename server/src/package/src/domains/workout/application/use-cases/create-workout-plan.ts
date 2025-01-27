@@ -13,6 +13,7 @@ interface CreateWorkoutPlanUseCaseRequest {
   authorId: string
   studentId: string
   title: string
+  description?: string
 }
 
 type CreateWorkoutPlanUseCaseResponse = Either<
@@ -33,6 +34,7 @@ export class CreateWorkoutPlanUseCase {
     authorId,
     studentId,
     title,
+    description,
   }: CreateWorkoutPlanUseCaseRequest): Promise<CreateWorkoutPlanUseCaseResponse> {
     const personalTrainer =
       await this.personalTrainersRepository.findById(authorId)
@@ -46,6 +48,7 @@ export class CreateWorkoutPlanUseCase {
       studentId: new UniqueEntityID(studentId),
       title,
       exercises: new WorkoutPlanExerciseList([]),
+      description,
     })
 
     const workoutPlanWithSameSlug =
