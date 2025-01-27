@@ -1,3 +1,4 @@
+import { CookiesHelper } from '@/utils/cookies-helper'
 import axios from 'axios'
 
 export const api = axios.create({
@@ -5,9 +6,11 @@ export const api = axios.create({
 })
 
 api.interceptors.request.use(async (config) => {
-  const token = 'temp'
+  const token = CookiesHelper.getCookie('authToken')
 
-  config.headers.Authorization = `Bearer ${token}`
+  if(token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
 
   return config
 })
