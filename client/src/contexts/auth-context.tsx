@@ -3,9 +3,11 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { CookiesHelper } from "@/utils/cookies-helper";
 import { getPayloadFromToken } from "@/utils/get-payload-from-token";
 
+type UserRoles = 'STUDENT' | 'PERSONAL_TRAINER' | 'ADMIN'
+
 interface User {
   id: string;
-  role: string;
+  role: UserRoles;
 }
 
 interface AuthContextType {

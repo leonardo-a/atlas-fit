@@ -4,6 +4,7 @@ import { ProtectedRoute } from "./components/protected-route";
 import { Home } from "./pages/home";
 import { SignIn } from "./pages/sign-in";
 import { WorkoutPlan } from "./pages/workout-plan";
+import { Profile } from "./pages/profile";
 
 
 export function App() {
@@ -16,6 +17,14 @@ export function App() {
           element={
             <ProtectedRoute>
               <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="perfil" 
+          element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           }
         />

@@ -1,17 +1,21 @@
-import { BedDouble, CloudAlert, Dumbbell, Loader2 } from "lucide-react";
+import { BedDouble, CloudAlert, ListPlus, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
+import { Header } from "@/components/header";
 import { WeekCarousel } from "@/components/week-caroussel";
 import { WorkoutPlanExercise } from "@/components/workout-plan-exercise";
 import { api } from "@/lib/axios";
+import { RequestStatus } from "@/types/app";
 import { WorkoutPlanExerciseWithName } from "@/types/exercises";
 import { WorkoutPlanWithDetails } from "@/types/workout-plan";
-import { RequestStatus } from "@/types/app";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/auth-context";
 
 
 export function WorkoutPlan() {
   const { id } = useParams()
+  const { user } = useAuth()
 
   const [status, setStatus] = useState<RequestStatus>('pending')
   const [workoutPlan, setWorkoutPlan] = useState<WorkoutPlanWithDetails | null>(null)
@@ -58,10 +62,8 @@ export function WorkoutPlan() {
 
   return (
     <>
-      <div className="w-full h-16 grid place-items-center bg-slate-100 fixed">
-        <Dumbbell size={36} className="text-lime-400"/>
-      </div>
-      <main className="mt-16 flex-1 flex flex-col items-center bg-orange-100 p-4">
+      <Header />
+      <main className="mt-16 flex-1 flex flex-col items-center bg-linear-to-tr from-orange-200 to-orange-100 p-4">
         {/* {workoutPlan} */}
         {status === 'pending' && (
           <div className="flex-1 grid place-items-center">
@@ -78,20 +80,44 @@ export function WorkoutPlan() {
             <div className="w-full bg-slate-50 flex-1 flex flex-col rounded-md space-y-3 px-2 py-4 shadow-xs">
               <div className="flex flex-col flex-1 gap-3 w-full px-4">
                 {exercises.length ? (
-                  exercises.map((item) => (
-                    <WorkoutPlanExercise 
-                      key={item.workoutPlanExerciseId} 
-                      {...item} 
-                    />
-                  ))
+                  <>
+                    {
+                      user?.role === 'PERSONAL_TRAINER' && (
+                        <Button variant='success'>
+                          <ListPlus />Adicionar Exercício
+                        </Button>
+                      )
+                    }
+                    {
+                      exercises.map((item) => (
+                        <WorkoutPlanExercise 
+                          key={item.workoutPlanExerciseId} 
+                          {...item} 
+                        />
+                      ))
+                    }
+                  </>
                 ) : (
-                  <div className="place-self-center my-auto flex flex-col items-center">
-                    <BedDouble className="text-slate-500"/>
-                    <div className="leading-tight text-center text-slate-500">
-                      <span>Dia de descanso</span>
-                      <p>Faça algo para relaxar!</p>
+                  <>
+                    {
+                      user?.role === 'PERSONAL_TRAINER' && (
+                        <Button variant='success'>
+                            <ListPlus />Adicionar Exercício
+                        </Button>
+                      )
+                    }
+                    <div className="place-self-center my-auto flex flex-col items-center">
+                      <BedDouble className="text-slate-500"/>
+                      <div className="leading-tight text-center text-slate-500">
+                        <span>Dia de descanso</span>
+                        {user?.role === 'STUDENT' ? (
+                          <p>Faça algo para relaxar!</p>
+                        ) : (
+                          <p>Nenhum exercício definido</p>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </div>
             </div>
