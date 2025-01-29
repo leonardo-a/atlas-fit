@@ -4,6 +4,7 @@ import { StudentsRepository } from '@/domains/workout/application/repositories/s
 import { Student } from '@/domains/workout/enterprise/entities/student'
 import { PrismaStudentMapper } from '../mappers/prisma-student-mapper'
 import { PrismaService } from '../prisma.service'
+import { FilterParams } from '@/core/repositories/filter-params'
 
 @Injectable()
 export class PrismaStudentsRepository implements StudentsRepository {
@@ -22,6 +23,35 @@ export class PrismaStudentsRepository implements StudentsRepository {
     }
 
     return PrismaStudentMapper.toDomain(student)
+  }
+
+  async findMany({ page, query }: FilterParams): Promise<Student[]> {
+    const students = await this.prisma.user.findMany({
+      where: {
+        role: 'STUDENT',
+        OR: [
+          {
+            name: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          },
+          {
+            email: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          },
+          {
+            id: query,
+          },
+        ],
+      },
+      take: 20,
+      skip: (page - 1) * 20,
+    })
+
+    return students.map(PrismaStudentMapper.toDomain)
   }
 
   async create(student: Student): Promise<void> {

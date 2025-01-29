@@ -6,6 +6,7 @@ import { CreateExerciseUseCase } from '@/domains/workout/application/use-cases/c
 import { CreateWorkoutPlanUseCase } from '@/domains/workout/application/use-cases/create-workout-plan'
 import { DeleteWorkoutPlanUseCase } from '@/domains/workout/application/use-cases/delete-workout-plan'
 import { FetchExercisesUseCase } from '@/domains/workout/application/use-cases/fetch-exercises'
+import { FetchStudentsUseCase } from '@/domains/workout/application/use-cases/fetch-students'
 import { FetchWeekDayWorkoutPlanExercisesUseCase } from '@/domains/workout/application/use-cases/fetch-week-day-workout-plan-exercises'
 import { FetchWorkoutPlansUseCase } from '@/domains/workout/application/use-cases/fetch-workout-plans'
 import { GetWorkoutPlanDetailsUseCase } from '@/domains/workout/application/use-cases/get-workout-plan-details'
@@ -20,6 +21,7 @@ import { CreateExerciseController } from './controllers/create-exercise.controll
 import { CreateWorkoutPlanController } from './controllers/create-workout-plan.controller'
 import { DeleteWrokoutPlanController } from './controllers/delete-workout-plan.controller'
 import { FetchExercisesController } from './controllers/fetch-exercises.controller'
+import { FetchStudentsController } from './controllers/fetch-students.controller'
 import { FetchWeekDayWorkoutPlanExercisesController } from './controllers/fetch-week-day-workout-plan-exercises.controller'
 import { FetchWorkoutPlansController } from './controllers/fetch-workout-plans.controller'
 import { GetWorkoutPlanDetailsController } from './controllers/get-workout-plan-details.controller'
@@ -39,6 +41,7 @@ import { RemoveExerciseFromWorkoutPlanController } from './controllers/remove-ex
     FetchWeekDayWorkoutPlanExercisesController,
     GetWorkoutPlanDetailsController,
     FetchExercisesController,
+    FetchStudentsController,
   ],
   providers: [
     AuthenticateUserUseCase,
@@ -52,6 +55,7 @@ import { RemoveExerciseFromWorkoutPlanController } from './controllers/remove-ex
     FetchWeekDayWorkoutPlanExercisesUseCase,
     GetWorkoutPlanDetailsUseCase,
     FetchExercisesUseCase,
+    FetchStudentsUseCase,
   ],
 })
 export class HttpModule {}
