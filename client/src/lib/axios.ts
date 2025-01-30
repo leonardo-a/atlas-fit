@@ -8,7 +8,7 @@ export const api = axios.create({
 api.interceptors.request.use(async (config) => {
   const token = CookiesHelper.getCookie('authToken')
 
-  if(token) {
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
 

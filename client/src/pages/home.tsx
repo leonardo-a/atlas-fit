@@ -1,17 +1,15 @@
-import { ClipboardList, ClipboardPlus, CloudAlert, Dumbbell, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ClipboardList, CloudAlert, Loader2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
-import { WeekCarousel } from "@/components/week-caroussel";
-import { WorkoutPlanItem } from "@/components/workout-plan-item";
-import { api } from "@/lib/axios";
-import { RequestStatus } from "@/types/app";
-import { WorkoutPlanSummary } from "@/types/workout-plan";
-import { toast } from "sonner";
-import { useAuth } from "@/contexts/auth-context";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Header } from "@/components/header";
-
+import { Header } from '@/components/header'
+import { NewWorkoutPlanDrawer } from '@/components/new-workout-plan-drawer'
+import { Input } from '@/components/ui/input'
+import { WeekCarousel } from '@/components/week-caroussel'
+import { WorkoutPlanItem } from '@/components/workout-plan-item'
+import { useAuth } from '@/contexts/auth-context'
+import { api } from '@/lib/axios'
+import { RequestStatus } from '@/types/app'
+import { WorkoutPlanSummary } from '@/types/workout-plan'
 
 export function Home() {
   const { user } = useAuth()
@@ -26,7 +24,7 @@ export function Home() {
 
       setWorkoutPlans(workoutPlans.data.workoutPlans)
       setWorkoutPlansStatus('success')
-    } catch(err) {
+    } catch (err) {
       setWorkoutPlansStatus('failed')
       console.log(err)
     }
@@ -74,7 +72,7 @@ export function Home() {
             </div>
           </div>
         )}
-        {(workoutPlansStatus === 'success' && workoutPlans) &&  (
+        {(workoutPlansStatus === 'success' && workoutPlans) && (
           <>
             {
               user?.role === 'PERSONAL_TRAINER' && (
@@ -83,9 +81,7 @@ export function Home() {
                     <ClipboardList />
                     <p className="text-xl font-bold my-4">Planilhas</p>
                   </div>
-                  <Button size={'lg'} variant='success'>
-                    <ClipboardPlus/>
-                  </Button>
+                  <NewWorkoutPlanDrawer />
                 </div>
               )
             }
@@ -94,10 +90,10 @@ export function Home() {
                 <p className="text-2xl font-bold my-2">Minhas Planilhas</p>
               )
             }
-            <Input placeholder="Nome da planilha..."/>
+            <Input placeholder="Nome da planilha..." />
             <div className="w-full flex flex-col gap-4">
-              {workoutPlans.map((item) =>  (
-              <WorkoutPlanItem key={item.slug} {...item} />
+              {workoutPlans.map((item) => (
+                <WorkoutPlanItem key={item.slug} {...item} />
               ))}
             </div>
           </>
