@@ -11,12 +11,24 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer'
 import { NewWorkoutPlanForm } from './new-workout-plan-form'
+import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 export function NewWorkoutPlanDrawer() {
+  const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
+
+  function onSuccess() {
+    setOpen(false)
+    setTimeout(() => {
+      navigate(0)
+    }, 800)
+  }
+
   return (
-    <Drawer>
+    <Drawer open={open} onClose={() => setOpen(false)}>
       <DrawerTrigger asChild>
-        <Button size="lg" variant="success">
+        <Button size="lg" variant="success" onClick={() => setOpen(!open)}>
           <ClipboardPlus />
         </Button>
       </DrawerTrigger>
@@ -26,7 +38,7 @@ export function NewWorkoutPlanDrawer() {
           <DrawerDescription>Crie uma planilha para um aluno</DrawerDescription>
         </DrawerHeader>
         <div className="px-6">
-          <NewWorkoutPlanForm />
+          <NewWorkoutPlanForm onSuccess={onSuccess} />
         </div>
         <DrawerFooter />
       </DrawerContent>

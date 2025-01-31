@@ -13,13 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { SONNER_ERROR_STYLE, SONNER_SUCCESS_STYLE } from '@/constants/sonner'
-import { api } from '@/lib/axios'
 import { cn } from '@/lib/utils'
-import { Student } from '@/types/students'
-import { Check, ChevronsUpDown } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import {
   Command,
   CommandEmpty,
@@ -33,40 +27,47 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { Textarea } from './ui/textarea'
+import { Input } from '@/components/ui/input'
+import { SONNER_ERROR_STYLE, SONNER_SUCCESS_STYLE } from '@/constants/sonner'
+import { api } from '@/lib/axios'
+import { Check, ChevronsUpDown } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Exercise } from '@/types/exercises'
 
 const formSchema = z.object({
-  title: z.string().min(3, {
+  exerciseId: z.string().uuid({
     message: 'Deve ter pelo menos 3 caracteres.',
   }),
-  description: z.string().optional(),
-  studentId: z.string().uuid({
-    message: 'Formato inválido',
+  repetitions: z.coerce.number().int().positive().min(1, {
+    message: 'Repetição não pode ser menor que 1',
+  }),
+  sets: z.coerce.number().int().positive().min(1, {
+    message: 'Séries não pode ser menor que 1',
   }),
 })
 
-interface NewWorkoutPlanFormProps {
+interface AssignExerciseFormProps {
+  workoutPlanId: string
+  weekDay: number
   onSuccess: () => void
 }
 
-export function NewWorkoutPlanForm({ onSuccess }: NewWorkoutPlanFormProps) {
-  const [students, setStudents] = useState<Student[]>([])
-  const [queryStudents, setQueryStudents] = useState<string | undefined>()
+export function AssignExerciseForm({ weekDay, workoutPlanId, onSuccess }: AssignExerciseFormProps) {
+  const [exercises, setExercises] = useState<Exercise[]>([])
+  const [queryExercises, setQueryExercises] = useState<string | undefined>()
 
-  async function fetchStudents(query?: string) {
+  async function fetchExercises(query?: string) {
     try {
-      const response = await api.get('/students', {
+      const response = await api.get('/exercises', {
         params: {
           query,
         },
       })
 
-      console.log(response.data.students)
-
-      setStudents(response.data.students)
+      setExercises(response.data.exercises)
     } catch (err) {
       console.log(err)
-      toast('Falha ao buscar alunos', SONNER_ERROR_STYLE)
+      toast('Falha ao buscar exercicios', SONNER_ERROR_STYLE)
     }
   }
 
@@ -74,63 +75,50 @@ export function NewWorkoutPlanForm({ onSuccess }: NewWorkoutPlanFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      description: '',
-      studentId: '',
+      exerciseId: '',
+      repetitions: 0,
+      sets: 0,
     },
   })
 
   // 2. Define a submit handler.
-  async function onSubmit({ studentId, title, description }: z.infer<typeof formSchema>) {
+  async function onSubmit({ exerciseId, repetitions, sets }: z.infer<typeof formSchema>) {
     try {
-      const response = await api.post('/workout-plans', {
-        title,
-        studentId,
-        description,
+      const response = await api.post(`/workout-plans/${workoutPlanId}/exercises`, {
+        exerciseId,
+        repetitions,
+        sets,
+        weekDay,
       })
 
       if (response.status === 201) {
-        toast('Planilha criada!', SONNER_SUCCESS_STYLE)
-        form.reset()
+        toast('Exercício registrado!', { ...SONNER_SUCCESS_STYLE, position: 'top-center' })
         onSuccess()
       }
     } catch (err) {
-      let message = 'Erro ao criar planilha'
+      let message = 'Erro ao registrar exercício'
 
       if (err instanceof AxiosError) {
         message = `[${err.status}] ${err.response?.data.message || message}`
       }
 
-      toast(message, SONNER_ERROR_STYLE)
+      toast(message, { ...SONNER_ERROR_STYLE, position: 'top-center' })
     }
   }
 
   useEffect(() => {
-    fetchStudents(queryStudents)
-  }, [queryStudents])
+    fetchExercises(queryExercises)
+  }, [queryExercises])
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Título <span className="text-red-400">*</span></FormLabel>
-              <FormControl>
-                <Input placeholder="Nome da planilha" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="studentId"
+          name="exerciseId"
           render={({ field }) => (
             <FormItem className="flex flex-col w-full">
-              <FormLabel>Aluno <span className="text-red-400">*</span></FormLabel>
+              <FormLabel>Exercício</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -143,10 +131,10 @@ export function NewWorkoutPlanForm({ onSuccess }: NewWorkoutPlanFormProps) {
                       )}
                     >
                       {field.value
-                        ? students.find(
-                          (student) => student.id === field.value,
+                        ? exercises.find(
+                          (exercise) => exercise.id === field.value,
                         )?.name
-                        : 'Selecione um aluno'}
+                        : 'Selecione o exercício'}
                       <ChevronsUpDown className="opacity-50" />
                     </Button>
                   </FormControl>
@@ -154,26 +142,26 @@ export function NewWorkoutPlanForm({ onSuccess }: NewWorkoutPlanFormProps) {
                 <PopoverContent className="p-0">
                   <Command>
                     <CommandInput
-                      placeholder="Procure um aluno..."
+                      placeholder="Procure um exercício..."
                       className="h-9"
-                      onValueChange={setQueryStudents}
+                      onValueChange={setQueryExercises}
                     />
                     <CommandList>
-                      <CommandEmpty>Nenhum aluno encontrado.</CommandEmpty>
+                      <CommandEmpty>Nenhum exercício encontrado.</CommandEmpty>
                       <CommandGroup>
-                        {students.map((student) => (
+                        {exercises.map((exercise) => (
                           <CommandItem
-                            value={student.name}
-                            key={student.id}
+                            value={exercise.name}
+                            key={exercise.id}
                             onSelect={() => {
-                              form.setValue('studentId', student.id)
+                              form.setValue('exerciseId', exercise.id)
                             }}
                           >
-                            {student.name}
+                            {exercise.name}
                             <Check
                               className={cn(
-                                'ml-auto text-lime-600',
-                                student.id === field.value
+                                'ml-auto',
+                                exercise.id === field.value
                                   ? 'opacity-100'
                                   : 'opacity-0',
                               )}
@@ -191,16 +179,25 @@ export function NewWorkoutPlanForm({ onSuccess }: NewWorkoutPlanFormProps) {
         />
         <FormField
           control={form.control}
-          name="description"
+          name="sets"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Descrição</FormLabel>
+              <FormLabel>Séries <span className="text-red-400">*</span></FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Descreva o objetivo dessa planilha"
-                  className="resize-none"
-                  rows={3} {...field}
-                />
+                <Input type="number" placeholder="Número de séries" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="repetitions"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Repetições <span className="text-red-400">*</span></FormLabel>
+              <FormControl>
+                <Input type="number" placeholder="Repetiçoes por série" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

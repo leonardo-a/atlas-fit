@@ -5,3 +5,9 @@ export interface WorkoutPlanExerciseWithName {
   sets: number
   repetitions: number
 }
+
+export interface Exercise {
+  id: string
+  name: string
+  description?: string
+}

@@ -1,16 +1,16 @@
-import { BedDouble, CloudAlert, ListPlus, Loader2 } from 'lucide-react'
+import { BedDouble, CloudAlert, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 
+import { AssignExerciseDrawer } from '@/components/assign-exercise-drawer'
 import { Header } from '@/components/header'
 import { WeekCarousel } from '@/components/week-caroussel'
 import { WorkoutPlanExercise } from '@/components/workout-plan-exercise'
+import { useAuth } from '@/contexts/auth-context'
 import { api } from '@/lib/axios'
 import { RequestStatus } from '@/types/app'
 import { WorkoutPlanExerciseWithName } from '@/types/exercises'
 import { WorkoutPlanWithDetails } from '@/types/workout-plan'
-import { Button } from '@/components/ui/button'
-import { useAuth } from '@/contexts/auth-context'
 
 export function WorkoutPlan() {
   const { id } = useParams()
@@ -78,49 +78,40 @@ export function WorkoutPlan() {
             <WeekCarousel onWeekDayPress={setWeekDay} />
             <div className="w-full bg-slate-50 flex-1 flex flex-col rounded-md space-y-3 px-2 py-4 shadow-xs">
               <div className="flex flex-col flex-1 gap-3 w-full px-4">
+                {
+                  user?.role === 'PERSONAL_TRAINER' && (
+                    <AssignExerciseDrawer weekDay={weekDay} workoutPlanId={id || ''} />
+                  )
+                }
                 {exercises.length
                   ? (
                     <>
                       {
-                      user?.role === 'PERSONAL_TRAINER' && (
-                        <Button variant="success">
-                          <ListPlus />Adicionar Exercício
-                        </Button>
-                      )
-                    }
-                      {
-                      exercises.map((item) => (
-                        <WorkoutPlanExercise
-                          key={item.workoutPlanExerciseId}
-                          {...item}
-                        />
-                      ))
-                    }
+                        exercises.map((item) => (
+                          <WorkoutPlanExercise
+                            key={item.workoutPlanExerciseId}
+                            {...item}
+                          />
+                        ))
+                        }
                     </>
                     )
                   : (
-                    <>
-                      {
-                      user?.role === 'PERSONAL_TRAINER' && (
-                        <Button variant="success">
-                          <ListPlus />Adicionar Exercício
-                        </Button>
-                      )
-                    }
-                      <div className="place-self-center my-auto flex flex-col items-center">
-                        <BedDouble className="text-slate-500" />
-                        <div className="leading-tight text-center text-slate-500">
-                          <span>Dia de descanso</span>
-                          {user?.role === 'STUDENT'
+                    <div className="place-self-center my-auto flex flex-col items-center">
+                      <BedDouble className="text-slate-500" />
+                      <div className="leading-tight text-center text-slate-500">
+                        <span>Dia de descanso</span>
+                        {
+                          user?.role === 'STUDENT'
                             ? (
                               <p>Faça algo para relaxar!</p>
                               )
                             : (
                               <p>Nenhum exercício definido</p>
-                              )}
-                        </div>
+                              )
+                        }
                       </div>
-                    </>
+                    </div>
                     )}
               </div>
             </div>
