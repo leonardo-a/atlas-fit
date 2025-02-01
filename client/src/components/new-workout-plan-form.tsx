@@ -1,25 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
+import { Check, ChevronsUpDown } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { SONNER_ERROR_STYLE, SONNER_SUCCESS_STYLE } from '@/constants/sonner'
-import { api } from '@/lib/axios'
-import { cn } from '@/lib/utils'
-import { Student } from '@/types/students'
-import { Check, ChevronsUpDown } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import {
   Command,
   CommandEmpty,
@@ -29,10 +16,23 @@ import {
   CommandList,
 } from '@/components/ui/command'
 import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { SONNER_ERROR_STYLE, SONNER_SUCCESS_STYLE } from '@/constants/sonner'
+import { api } from '@/lib/axios'
+import { cn } from '@/lib/utils'
+import { Student } from '@/types/students'
 import { Textarea } from './ui/textarea'
 
 const formSchema = z.object({
@@ -51,6 +51,7 @@ interface NewWorkoutPlanFormProps {
 
 export function NewWorkoutPlanForm({ onSuccess }: NewWorkoutPlanFormProps) {
   const [students, setStudents] = useState<Student[]>([])
+  const [isStudentsSelectorOpen, setIsStudentsSelectorOpen] = useState(false)
   const [queryStudents, setQueryStudents] = useState<string | undefined>()
 
   async function fetchStudents(query?: string) {
@@ -70,7 +71,6 @@ export function NewWorkoutPlanForm({ onSuccess }: NewWorkoutPlanFormProps) {
     }
   }
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -80,7 +80,6 @@ export function NewWorkoutPlanForm({ onSuccess }: NewWorkoutPlanFormProps) {
     },
   })
 
-  // 2. Define a submit handler.
   async function onSubmit({ studentId, title, description }: z.infer<typeof formSchema>) {
     try {
       const response = await api.post('/workout-plans', {
@@ -131,7 +130,7 @@ export function NewWorkoutPlanForm({ onSuccess }: NewWorkoutPlanFormProps) {
           render={({ field }) => (
             <FormItem className="flex flex-col w-full">
               <FormLabel>Aluno <span className="text-red-400">*</span></FormLabel>
-              <Popover>
+              <Popover open={isStudentsSelectorOpen} onOpenChange={setIsStudentsSelectorOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
@@ -161,15 +160,20 @@ export function NewWorkoutPlanForm({ onSuccess }: NewWorkoutPlanFormProps) {
                     <CommandList>
                       <CommandEmpty>Nenhum aluno encontrado.</CommandEmpty>
                       <CommandGroup>
-                        {students.map((student) => (
+                        {students.map((student: Student) => (
                           <CommandItem
                             value={student.name}
                             key={student.id}
                             onSelect={() => {
+                              setIsStudentsSelectorOpen(false)
                               form.setValue('studentId', student.id)
                             }}
                           >
-                            {student.name}
+                            <div className="leading-none">
+                              <p>{student.name}</p>
+                              <p className="text-xs opacity-45">{student.email}</p>
+
+                            </div>
                             <Check
                               className={cn(
                                 'ml-auto text-lime-600',

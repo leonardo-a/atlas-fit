@@ -22,26 +22,41 @@ import { api } from '@/lib/axios'
 import { cn } from '@/lib/utils'
 
 const formSchema = z.object({
+  name: z.string(),
   email: z.string().email('Deve ser um email válido'),
-  password: z.string(),
+  password: z.string().min(6, 'Senha muito curta'),
+  passwordConfirmation: z.string(),
 })
 
-export function SignInForm() {
+export function SignUpForm() {
   const { login } = useAuth()
   const [isProcessing, setIsProcessing] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: '',
       email: '',
       password: '',
+      passwordConfirmation: '',
     },
   })
 
-  async function onSubmit({ email, password }: z.infer<typeof formSchema>) {
+  async function onSubmit({ name, email, password, passwordConfirmation }: z.infer<typeof formSchema>) {
+    if (password !== passwordConfirmation) {
+      toast('Senhas não coincidem', { ...SONNER_ERROR_STYLE, position: 'top-center' })
+      return
+    }
+
     setIsProcessing(true)
 
     try {
+      await api.post('/accounts', {
+        name,
+        email,
+        password,
+      })
+
       const response = await api.post('/sessions', {
         email,
         password,
@@ -50,19 +65,18 @@ export function SignInForm() {
       login(response.data.access_token)
     } catch (loginErr) {
       setIsProcessing(false)
-      let message = 'Erro no login.'
+
+      let message = 'Erro no cadastro.'
 
       if (loginErr instanceof AxiosError) {
-        const errorMessage = loginErr.status === 400
-          ? 'Requisição inválida'
-          : loginErr.status === 401
-            ? 'Credenciais Inválidas'
-            : message
+        const errorMessage = loginErr.status === 409
+          ? 'Usuário já foi cadastrado'
+          : 'Requisição inválida'
 
         message = `[${loginErr.status}] ${errorMessage}`
       }
 
-      toast(message, SONNER_ERROR_STYLE)
+      toast(message, { ...SONNER_ERROR_STYLE, position: 'top-center' })
     }
   }
 
@@ -71,12 +85,25 @@ export function SignInForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nome Completo <span className="text-red-400">*</span></FormLabel>
+              <FormControl>
+                <Input placeholder="Digite seu nome..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Email <span className="text-red-400">*</span></FormLabel>
               <FormControl>
-                <Input placeholder="usuario@email.com" type="email" {...field} />
+                <Input placeholder="Digite seu email..." type="email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -87,9 +114,22 @@ export function SignInForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Senha</FormLabel>
+              <FormLabel>Senha <span className="text-red-400">*</span></FormLabel>
               <FormControl>
-                <Input placeholder="******" type="password" {...field} />
+                <Input placeholder="Crie uma senha" type="password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="passwordConfirmation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirmar senha <span className="text-red-400">*</span></FormLabel>
+              <FormControl>
+                <Input placeholder="Digite sua senha novamente" type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -105,7 +145,7 @@ export function SignInForm() {
           >
             {isProcessing
               ? (<Loader2 className="animate-spin" />)
-              : 'Entrar'}
+              : 'Cadastrar'}
           </Button>
         </div>
       </form>

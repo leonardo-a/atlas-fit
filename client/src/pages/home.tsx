@@ -2,7 +2,7 @@ import { ClipboardList, CloudAlert, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { Header } from '@/components/header'
-import { NewWorkoutPlanDrawer } from '@/components/new-workout-plan-drawer'
+import { NewWorkoutPlanSheet } from '@/components/new-workout-plan-sheet'
 import { Input } from '@/components/ui/input'
 import { WeekCarousel } from '@/components/week-caroussel'
 import { WorkoutPlanItem } from '@/components/workout-plan-item'
@@ -42,7 +42,7 @@ export function Home() {
           {
             user?.role === 'PERSONAL_TRAINER' && (
               <>
-                <h2 className="font-semibold text-md text-slate-950">Bem vindo, Professor!</h2>
+                <h2 className="font-semibold text-md text-slate-950">Bem vindo, {user.name}!</h2>
                 <p className="text-md text-slate-800">Acompanhe os treinos dos seus alunos</p>
               </>
             )
@@ -50,7 +50,7 @@ export function Home() {
           {
             user?.role === 'STUDENT' && (
               <>
-                <h2 className="font-semibold text-md text-slate-950">Bem vindo, Usuário!</h2>
+                <h2 className="font-semibold text-md text-slate-950">Bem vindo, {user.name}!</h2>
                 <p className="text-md text-slate-800">Confira sua rotina de treino da semana</p>
               </>
             )
@@ -81,7 +81,8 @@ export function Home() {
                     <ClipboardList />
                     <p className="text-xl font-bold my-4">Planilhas</p>
                   </div>
-                  <NewWorkoutPlanDrawer />
+                  {/* <NewWorkoutPlanDrawer /> */}
+                  <NewWorkoutPlanSheet />
                 </div>
               )
             }

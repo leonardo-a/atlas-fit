@@ -1,6 +1,6 @@
 import { BedDouble, CloudAlert, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useLocation, useParams, useSearchParams } from 'react-router'
 
 import { AssignExerciseDrawer } from '@/components/assign-exercise-drawer'
 import { Header } from '@/components/header'
@@ -15,11 +15,21 @@ import { WorkoutPlanWithDetails } from '@/types/workout-plan'
 export function WorkoutPlan() {
   const { id } = useParams()
   const { user } = useAuth()
+  const { search } = useLocation()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const [status, setStatus] = useState<RequestStatus>('pending')
   const [workoutPlan, setWorkoutPlan] = useState<WorkoutPlanWithDetails | null>(null)
   const [exercises, setExercises] = useState<WorkoutPlanExerciseWithName[]>([])
-  const [weekDay, setWeekDay] = useState<number>(new Date().getDay() + 1)
+  const [weekDay, setWeekDay] = useState<number>(() => {
+    const weekDay = searchParams.get('dia')
+
+    if (!weekDay) {
+      return new Date().getDay() + 1
+    }
+
+    return parseInt(weekDay)
+  })
 
   async function fetchWorkoutPlan() {
     setStatus('pending')
@@ -46,14 +56,23 @@ export function WorkoutPlan() {
       })
 
       setExercises(response.data.weekDayExercises)
+      searchParams.delete('upt')
+      setSearchParams(searchParams)
     } catch (err) {
       console.log(err)
     }
   }
 
+  function onWeekDayChange(weekDay: number) {
+    searchParams.set('dia', weekDay.toString())
+    setSearchParams(searchParams)
+
+    setWeekDay(weekDay)
+  }
+
   useEffect(() => {
     fetchExercises()
-  }, [weekDay])
+  }, [weekDay, search])
 
   useEffect(() => {
     fetchWorkoutPlan()
@@ -75,7 +94,7 @@ export function WorkoutPlan() {
               <p className="text-sm font-medium text-slate-500 leading-none">Planilha</p>
               <h2 className="text-2xl font-bold text-slate-900 leading-none">{workoutPlan.title}</h2>
             </div>
-            <WeekCarousel onWeekDayPress={setWeekDay} />
+            <WeekCarousel selectedWeekDay={weekDay} onWeekDayPress={onWeekDayChange} />
             <div className="w-full bg-slate-50 flex-1 flex flex-col rounded-md space-y-3 px-2 py-4 shadow-xs">
               <div className="flex flex-col flex-1 gap-3 w-full px-4">
                 {

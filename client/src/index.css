@@ -81,6 +81,8 @@
 @plugin "tailwindcss-animate";
 
 @theme {
+  --font-sans: "Liter", "sans-serif";
+  --font-display: "Oswald", "sans-serif";
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

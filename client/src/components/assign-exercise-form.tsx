@@ -1,19 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
+import { Check, ChevronsUpDown } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { cn } from '@/lib/utils'
 import {
   Command,
   CommandEmpty,
@@ -23,27 +16,44 @@ import {
   CommandList,
 } from '@/components/ui/command'
 import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { Input } from '@/components/ui/input'
 import { SONNER_ERROR_STYLE, SONNER_SUCCESS_STYLE } from '@/constants/sonner'
 import { api } from '@/lib/axios'
-import { Check, ChevronsUpDown } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { cn } from '@/lib/utils'
 import { Exercise } from '@/types/exercises'
 
 const formSchema = z.object({
   exerciseId: z.string().uuid({
     message: 'Deve ter pelo menos 3 caracteres.',
   }),
-  repetitions: z.coerce.number().int().positive().min(1, {
-    message: 'Repetição não pode ser menor que 1',
-  }),
-  sets: z.coerce.number().int().positive().min(1, {
-    message: 'Séries não pode ser menor que 1',
-  }),
+  repetitions: z
+    .coerce
+    .number()
+    .int('Quantidade inválida')
+    .positive('Quantidade inválida')
+    .min(1, {
+      message: 'Repetição não pode ser menor que 1',
+    }),
+  sets: z
+    .coerce
+    .number()
+    .int('Quantidade inválida')
+    .positive('Quantidade inválida')
+    .min(1, {
+      message: 'Séries não pode ser menor que 1',
+    }),
 })
 
 interface AssignExerciseFormProps {
@@ -55,6 +65,7 @@ interface AssignExerciseFormProps {
 export function AssignExerciseForm({ weekDay, workoutPlanId, onSuccess }: AssignExerciseFormProps) {
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [queryExercises, setQueryExercises] = useState<string | undefined>()
+  const [isExercisesPopoverOpen, setIsExercisesPopoverOpen] = useState(false)
 
   async function fetchExercises(query?: string) {
     try {
@@ -71,7 +82,6 @@ export function AssignExerciseForm({ weekDay, workoutPlanId, onSuccess }: Assign
     }
   }
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -81,7 +91,6 @@ export function AssignExerciseForm({ weekDay, workoutPlanId, onSuccess }: Assign
     },
   })
 
-  // 2. Define a submit handler.
   async function onSubmit({ exerciseId, repetitions, sets }: z.infer<typeof formSchema>) {
     try {
       const response = await api.post(`/workout-plans/${workoutPlanId}/exercises`, {
@@ -92,7 +101,8 @@ export function AssignExerciseForm({ weekDay, workoutPlanId, onSuccess }: Assign
       })
 
       if (response.status === 201) {
-        toast('Exercício registrado!', { ...SONNER_SUCCESS_STYLE, position: 'top-center' })
+        toast('Exercício registrado!', SONNER_SUCCESS_STYLE)
+        form.reset()
         onSuccess()
       }
     } catch (err) {
@@ -119,7 +129,7 @@ export function AssignExerciseForm({ weekDay, workoutPlanId, onSuccess }: Assign
           render={({ field }) => (
             <FormItem className="flex flex-col w-full">
               <FormLabel>Exercício</FormLabel>
-              <Popover>
+              <Popover open={isExercisesPopoverOpen} onOpenChange={setIsExercisesPopoverOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
@@ -154,6 +164,7 @@ export function AssignExerciseForm({ weekDay, workoutPlanId, onSuccess }: Assign
                             value={exercise.name}
                             key={exercise.id}
                             onSelect={() => {
+                              setIsExercisesPopoverOpen(false)
                               form.setValue('exerciseId', exercise.id)
                             }}
                           >

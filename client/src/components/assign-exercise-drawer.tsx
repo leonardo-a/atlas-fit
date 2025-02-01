@@ -10,9 +10,9 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
-import { AssignExerciseForm } from './assign-exercise-form'
-import { useNavigate } from 'react-router'
 import { useState } from 'react'
+import { useSearchParams } from 'react-router'
+import { AssignExerciseForm } from './assign-exercise-form'
 
 interface AssignExerciseDrawerProps {
   weekDay: number
@@ -30,14 +30,18 @@ const weekDays: Record<number, string> = {
 }
 
 export function AssignExerciseDrawer({ weekDay, workoutPlanId }: AssignExerciseDrawerProps) {
-  const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
+
   const [open, setOpen] = useState(false)
 
   function onSuccess() {
     setOpen(false)
-    setTimeout(() => {
-      navigate(0)
-    }, 800)
+
+    searchParams.set('upt', new Date().getTime().toString())
+    setSearchParams(searchParams)
+    // setTimeout(() => {
+    //   navigate(0)
+    // }, 800)
   }
 
   return (
