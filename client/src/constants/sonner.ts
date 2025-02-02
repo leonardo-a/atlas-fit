@@ -11,5 +11,6 @@ export const SONNER_SUCCESS_STYLE: ExternalToast = {
   style: {
     backgroundColor: '#89EE54',
     borderColor: '#89f336',
+    color: '#1E293B',
   },
 }

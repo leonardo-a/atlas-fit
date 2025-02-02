@@ -9,5 +9,6 @@ export interface WorkoutPlanExerciseWithName {
 export interface Exercise {
   id: string
   name: string
+  videoUrl?: string
   description?: string
 }

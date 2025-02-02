@@ -1,4 +1,5 @@
 import { Header } from '@/components/header'
+import { NewExerciseSheet } from '@/components/new-exercise-sheet'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/auth-context'
 import { Dumbbell, LogOut, User2 } from 'lucide-react'
@@ -54,9 +55,11 @@ export function Profile() {
               <div className="flex flex-col gap-2">
                 <span className="font-medium opacity-70">Treinos</span>
                 <div className="flex flex-col gap-3 px-3">
-                  <Button variant="outline" className="justify-start">
-                    <Dumbbell /> Cadastrar exercício
-                  </Button>
+                  <NewExerciseSheet>
+                    <Button variant="outline" className="justify-start w-full">
+                      <Dumbbell /> Cadastrar exercício
+                    </Button>
+                  </NewExerciseSheet>
                   {/* <Button variant="outline" className="justify-start">
                     <ListPlus /> Cadastrar lista de exercícios
                   </Button> */}
