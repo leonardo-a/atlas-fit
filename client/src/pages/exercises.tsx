@@ -67,7 +67,7 @@ export function Exercises() {
         </div>
       </SecondaryContainer>
       <main className="flex flex-col gap-4 flex-1 items-center bg-slate-100 px-5">
-        <Input placeholder="Nome ou email do aluno..." onChange={(evt) => onSearch(evt.currentTarget.value)} />
+        <Input placeholder="Busque pelo nome do exercício..." onChange={(evt) => onSearch(evt.currentTarget.value)} />
         {requestStatus === 'pending' && (
           <div className="my-auto">
             <Loader2 className="animate-spin text-lime-400" size={32} />
@@ -77,14 +77,14 @@ export function Exercises() {
           <div className="my-auto">
             <div className="flex flex-col items-center">
               <CloudAlert className="text-red-400" />
-              <span className="text-red-400">Erro ao buscar alunos</span>
+              <span className="text-red-400">Erro ao buscar exercícios</span>
             </div>
           </div>
         )}
         {(requestStatus === 'success') && (
           <div className="w-full">
             <div className="space-y-3">
-              <div className="w-full flex flex-col gap-4">
+              <div className="w-full flex flex-col gap-4 mb-8">
                 {exercises.map((item) => (
                   <div
                     key={`exercise-${item.id}`}

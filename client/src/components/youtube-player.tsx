@@ -15,7 +15,7 @@ export function YoutubePlayer({ videoUrl }: YoutubePlayerProps) {
 
   const options = {
     width: '100%',
-    height: '400',
+    height: '420',
     playerVars: {
       autoplay: 1, // 1 para autoplay, 0 para manual
       loop: 1,
@@ -24,6 +24,8 @@ export function YoutubePlayer({ videoUrl }: YoutubePlayerProps) {
   }
 
   return (
-    <YouTube videoId={videoId} opts={options} />
+    <div className="w-full h-[420px]">
+      <YouTube videoId={videoId} opts={options} />
+    </div>
   )
 }

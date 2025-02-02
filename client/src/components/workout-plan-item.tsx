@@ -1,10 +1,10 @@
-import { WorkoutPlanSummary } from "@/types/workout-plan";
-import { ChevronRight, Dumbbell, User } from "lucide-react";
-import { Link } from "react-router";
+import { WorkoutPlanSummary } from '@/types/workout-plan'
+import { ChevronRight, Dumbbell, User } from 'lucide-react'
+import { Link } from 'react-router'
 
 type WorkoutPlanItemProps = WorkoutPlanSummary
 
-export function WorkoutPlanItem({id, author, exercises, title}: WorkoutPlanItemProps) {
+export function WorkoutPlanItem({ id, author, exercises, title }: WorkoutPlanItemProps) {
   // TODO: Exibir nome do aluno quando o usuário for um personal
   return (
     <Link to={`/planilhas/${id}`}>
@@ -29,5 +29,3 @@ export function WorkoutPlanItem({id, author, exercises, title}: WorkoutPlanItemP
     </Link>
   )
 }
-
-

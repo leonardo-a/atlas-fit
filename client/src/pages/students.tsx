@@ -83,7 +83,7 @@ export function Students() {
         {(requestStatus === 'success') && (
           <div className="w-full">
             <div className="space-y-3">
-              <div className="w-full flex flex-col gap-4">
+              <div className="w-full flex flex-col gap-4 mb-8">
                 {students.map((item) => (
                   <div
                     key={`student-${item.id}`}
