@@ -17,6 +17,7 @@ export function makeExercise(
     {
       name: faker.word.adjective(),
       description: faker.lorem.paragraph(),
+      videoUrl: faker.internet.url(),
       ...override,
     },
     id,

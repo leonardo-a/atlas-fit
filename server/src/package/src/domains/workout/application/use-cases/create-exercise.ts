@@ -6,6 +6,7 @@ import { Injectable } from '@nestjs/common'
 
 interface CreateExerciseUseCaseRequest {
   name: string
+  videoUrl?: string | null
   description?: string | null
 }
 
@@ -22,10 +23,12 @@ export class CreateExerciseUseCase {
 
   async execute({
     name,
+    videoUrl,
     description,
   }: CreateExerciseUseCaseRequest): Promise<CreateExerciseUseCaseResponse> {
     const exercise = Exercise.create({
       name,
+      videoUrl,
       description,
     })
 

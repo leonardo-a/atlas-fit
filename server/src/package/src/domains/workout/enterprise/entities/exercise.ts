@@ -6,12 +6,17 @@ import { Optional } from '@/core/types/optional'
 export interface ExerciseProps {
   name: string
   slug: Slug
+  videoUrl?: string | null
   description?: string | null
 }
 
 export class Exercise extends Entity<ExerciseProps> {
   get name() {
     return this.props.name
+  }
+
+  get videoUrl() {
+    return this.props.videoUrl
   }
 
   get slug() {

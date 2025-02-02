@@ -17,6 +17,7 @@ import { ZodValidationPipe } from '../pipes/zod-validation.pipe'
 
 const createExerciseBodySchema = z.object({
   name: z.string(),
+  videoUrl: z.string().url().optional(),
   description: z.string().optional(),
 })
 
@@ -34,7 +35,7 @@ export class CreateExerciseController {
     @Body(bodyValidationPipe) body: CreateExerciseBodySchema,
     @CurrentUser() user: UserPayload,
   ) {
-    const { name, description } = body
+    const { name, videoUrl, description } = body
 
     if (user.role === 'STUDENT') {
       throw new UnauthorizedException()
@@ -42,6 +43,7 @@ export class CreateExerciseController {
 
     const result = await this.createExercise.execute({
       name,
+      videoUrl,
       description,
     })
 
