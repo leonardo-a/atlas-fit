@@ -57,7 +57,7 @@ export function WorkoutPlan() {
 
       setExercises(response.data.weekDayExercises)
       searchParams.delete('upt')
-      setSearchParams(searchParams)
+      setSearchParams(searchParams, { replace: true })
     } catch (err) {
       console.log(err)
     }
@@ -65,7 +65,7 @@ export function WorkoutPlan() {
 
   function onWeekDayChange(weekDay: number) {
     searchParams.set('dia', weekDay.toString())
-    setSearchParams(searchParams)
+    setSearchParams(searchParams, { replace: true })
 
     setWeekDay(weekDay)
   }

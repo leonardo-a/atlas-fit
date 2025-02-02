@@ -13,20 +13,21 @@ interface User {
 }
 
 interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  login: (token: string) => void;
-  logout: () => void;
+  user: User | null | undefined
+  isAuthenticated: boolean
+  login: (token: string) => void
+  logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 interface AuthProviderProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true) // Novo estado
 
   function login(token: string) {
     const { sub, role, name } = getPayloadFromToken(token)
@@ -39,12 +40,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     })
 
     CookiesHelper.setCookie('authToken', token, 7)
-  };
+  }
 
   function logout() {
     setUser(null)
     CookiesHelper.deleteCookie('authToken')
-  };
+  }
 
   const isAuthenticated = !!user
 
@@ -59,14 +60,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
         CookiesHelper.deleteCookie('authToken')
       }
     }
+    setLoading(false) // Define como falso após a verificação
   }, [])
 
   return (
     <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
-      {children}
+      {!loading && children} {/* Só renderiza o app quando não estiver carregando */}
     </AuthContext.Provider>
   )
-};
+}
 
 // Hook para acessar o contexto
 export const useAuth = (): AuthContextType => {

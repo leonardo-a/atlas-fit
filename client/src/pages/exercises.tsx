@@ -1,10 +1,10 @@
-import { CloudAlert, Dumbbell, Ghost, Loader2, SquarePen } from 'lucide-react'
+import { CloudAlert, Dumbbell, Ghost, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 
+import { EditExerciseSheet } from '@/components/edit-exercise-sheet'
 import { Header } from '@/components/header'
 import { SecondaryContainer } from '@/components/secondary-container'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAuth } from '@/contexts/auth-context'
 import { api } from '@/lib/axios'
@@ -105,9 +105,7 @@ export function Exercises() {
                         }
                       </p>
                     </div>
-                    <Button variant="success">
-                      <SquarePen />
-                    </Button>
+                    <EditExerciseSheet exercise={item} />
                   </div>
                 ))}
                 {exercises.length === 0 && (

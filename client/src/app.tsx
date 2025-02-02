@@ -1,14 +1,14 @@
 import { Route, Routes } from 'react-router'
 
 import { ProtectedRoute } from './components/protected-route'
+import { Exercises } from './pages/exercises'
 import { Home } from './pages/home'
 import { Profile } from './pages/profile'
 import { SignIn } from './pages/sign-in'
 import { SignUp } from './pages/sign-up'
+import { Students } from './pages/students'
 import { WorkoutPlan } from './pages/workout-plan'
 import { WorkoutPlans } from './pages/workout-plans'
-import { Students } from './pages/students'
-import { Exercises } from './pages/exercises'
 
 export function App() {
   return (

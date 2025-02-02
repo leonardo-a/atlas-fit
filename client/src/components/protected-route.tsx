@@ -8,7 +8,11 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isAuthenticated } = useAuth()
+  const { user, isAuthenticated } = useAuth()
+
+  if (user === undefined) {
+    return null // Aguarda a autenticação ser processada antes de renderizar
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/entrar" />

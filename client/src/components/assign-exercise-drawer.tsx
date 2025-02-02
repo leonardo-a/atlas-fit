@@ -38,7 +38,7 @@ export function AssignExerciseDrawer({ weekDay, workoutPlanId }: AssignExerciseD
     setOpen(false)
 
     searchParams.set('upt', new Date().getTime().toString())
-    setSearchParams(searchParams)
+    setSearchParams(searchParams, { replace: true })
     // setTimeout(() => {
     //   navigate(0)
     // }, 800)

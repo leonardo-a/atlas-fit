@@ -1,6 +1,6 @@
-import { Dumbbell } from "lucide-react"
+import { Dumbbell } from 'lucide-react'
 
-import { WorkoutPlanExerciseWithName } from "@/types/exercises"
+import { WorkoutPlanExerciseWithName } from '@/types/exercises'
 
 type WorkoutPlanExerciseProps = WorkoutPlanExerciseWithName
 
