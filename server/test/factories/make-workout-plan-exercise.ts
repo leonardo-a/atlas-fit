@@ -1,10 +1,13 @@
 import { faker } from '@faker-js/faker'
+import { Injectable } from '@nestjs/common'
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import {
   WorkoutPlanExercise,
   WorkoutPlanExerciseProps,
-} from '@/domain/workout/enterprise/entities/workout-plan-exercise'
+} from '@/domains/workout/enterprise/entities/workout-plan-exercise'
+import { PrismaWorkoutPlanExerciseMapper } from '@/infra/database/prisma/mappers/prisma-workout-plan-exercise-mapper'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
 
 export function makeWorkoutPlanExercise(
   override: Partial<WorkoutPlanExerciseProps> = {},
@@ -23,4 +26,21 @@ export function makeWorkoutPlanExercise(
   )
 
   return workoutPlanExercise
+}
+
+@Injectable()
+export class WorkoutPlanExerciseFactory {
+  constructor(private prisma: PrismaService) {}
+
+  async makePrismaWorkoutPlanExercise(
+    data: Partial<WorkoutPlanExerciseProps> = {},
+  ): Promise<WorkoutPlanExercise> {
+    const workoutPlanExercise = makeWorkoutPlanExercise(data)
+
+    await this.prisma.workoutPlanExercise.create({
+      data: PrismaWorkoutPlanExerciseMapper.toPrisma(workoutPlanExercise),
+    })
+
+    return workoutPlanExercise
+  }
 }
