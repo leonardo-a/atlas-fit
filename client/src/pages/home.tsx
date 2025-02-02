@@ -1,8 +1,10 @@
-import { ClipboardList, CloudAlert, Loader2 } from 'lucide-react'
+import { BookCopy, ClipboardList, CloudAlert, Dumbbell, Loader2, Users2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router'
 
 import { Header } from '@/components/header'
-import { NewWorkoutPlanSheet } from '@/components/new-workout-plan-sheet'
+import { SecondaryContainer } from '@/components/secondary-container'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { WeekCarousel } from '@/components/week-caroussel'
 import { WorkoutPlanItem } from '@/components/workout-plan-item'
@@ -13,7 +15,7 @@ import { WorkoutPlanSummary } from '@/types/workout-plan'
 
 export function Home() {
   const { user } = useAuth()
-  const [workoutPlansStatus, setWorkoutPlansStatus] = useState<RequestStatus>('pending')
+  const [workoutPlansStatus, setWorkoutPlansStatus] = useState<RequestStatus>('idle')
   const [workoutPlans, setWorkoutPlans] = useState<WorkoutPlanSummary[]>([])
 
   async function fetchWorkoutPlans() {
@@ -31,13 +33,15 @@ export function Home() {
   }
 
   useEffect(() => {
-    fetchWorkoutPlans()
-  }, [])
+    if (user?.role === 'STUDENT') {
+      fetchWorkoutPlans()
+    }
+  }, [user])
 
   return (
     <>
       <Header />
-      <div className="mt-16 flex flex-col justify-end gap-4 h-44 p-4 bg-linear-to-tr from-orange-200 to-orange-100 rounded-lg mx-4">
+      <SecondaryContainer className="mt-16 flex flex-col justify-end gap-4 h-44">
         <div className="leading-tight">
           <h2 className="font-semibold text-md text-slate-950">Bem vindo, {user?.name}!</h2>
           <p className="text-md text-slate-800">
@@ -49,7 +53,7 @@ export function Home() {
           </p>
         </div>
         <WeekCarousel size="sm" />
-      </div>
+      </SecondaryContainer>
       <main className="flex flex-col gap-4 flex-1 items-center bg-slate-100 px-5">
         {workoutPlansStatus === 'pending' && (
           <div className="my-auto">
@@ -65,27 +69,85 @@ export function Home() {
           </div>
         )}
         {(workoutPlansStatus === 'success' && workoutPlans) && (
-          <>
-            <div className="flex w-full items-center justify-between mt-2">
-              <div className="flex items-center gap-1">
-                <ClipboardList size={20} />
-                <p className="text-md my-4 leading-none">
-                  {
-                    user?.role === 'PERSONAL_TRAINER'
-                      ? 'Planilhas'
-                      : 'Meus Treinos'
-                    }
-                </p>
+          <div className="mt-4 w-full">
+            {user?.role === 'STUDENT' && (
+              <div className="space-y-3">
+                <Input placeholder="Busque por planilhas..." />
+                <div className="w-full flex flex-col gap-4">
+                  {workoutPlans.map((item) => (
+                    <WorkoutPlanItem key={item.slug} {...item} />
+                  ))}
+                </div>
               </div>
-              {user?.role === 'PERSONAL_TRAINER' && (<NewWorkoutPlanSheet />)}
+            )}
+          </div>
+        )}
+        {(user?.role === 'PERSONAL_TRAINER' || user?.role === 'ADMIN') && (
+          <div className="w-full">
+            <div className="grid grid-cols-1 w-full gap-4 my-8">
+              <Link to="/planilhas">
+                <Button variant="outline" className="h-32 [&_svg]:size-8 hover:bg-lime-200 w-full">
+                  <div className="flex w-full items-center justify-start gap-2">
+                    <div className="size-12 grid place-items-center">
+                      <ClipboardList strokeWidth={1} />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-display text-lg">Minhas Planilhas</p>
+                      <p className="text-xs opacity-70">
+                        Consulte as planilhas de seus alunos
+                      </p>
+                    </div>
+                  </div>
+                </Button>
+              </Link>
+              <Link to="/exercicios">
+                <Button variant="outline" className="h-32 [&_svg]:size-8 hover:bg-lime-200 w-full">
+                  <div className="flex w-full items-center justify-start gap-2">
+                    <div className="size-12 grid place-items-center">
+                      <Dumbbell strokeWidth={1} />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-display text-lg">Exercícios</p>
+                      <p className="text-xs opacity-70">
+                        Gerencie os exercícios cadastrados
+                      </p>
+                    </div>
+                  </div>
+                </Button>
+              </Link>
+              <Link to="/alunos">
+                <Button variant="outline" className="h-32 [&_svg]:size-8 hover:bg-lime-200 w-full">
+                  <div className="flex w-full items-center justify-start gap-2">
+                    <div className="size-12 grid place-items-center">
+                      <Users2 strokeWidth={1} />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-display text-lg">Alunos</p>
+                      <p className="text-xs opacity-70">
+                        Procure por alunos cadastrados
+                      </p>
+                    </div>
+                  </div>
+                </Button>
+              </Link>
+              <Button variant="outline" className="h-32 [&_svg]:size-8" disabled>
+                <div className="flex w-full items-center justify-start gap-2">
+                  <div className="size-12 grid place-items-center">
+                    <BookCopy strokeWidth={1} />
+                  </div>
+                  <div className="text-left">
+                    <p className="font-display text-lg">
+                      Lista de exercícios{' '}
+                      <span className="font-light text-sky-400 text-xs italic">em breve</span>
+                    </p>
+                    <p className="text-xs opacity-70">
+                      Gerencie suas listas prontas de exercícios
+                    </p>
+                  </div>
+                </div>
+              </Button>
             </div>
-            <Input placeholder="Busque por planilhas..." />
-            <div className="w-full flex flex-col gap-4">
-              {workoutPlans.map((item) => (
-                <WorkoutPlanItem key={item.slug} {...item} />
-              ))}
-            </div>
-          </>
+          </div>
         )}
       </main>
     </>

@@ -1,1 +1,1 @@
-export type RequestStatus = 'success' | 'pending' | 'failed' 
+export type RequestStatus = 'success' | 'pending' | 'failed' | 'idle'
