@@ -39,7 +39,7 @@ export function Students() {
 
   function onSearch(value: string) {
     searchParams.set('q', value)
-    setSearchParams(searchParams)
+    setSearchParams(searchParams, { replace: true })
 
     setQuery(value)
   }

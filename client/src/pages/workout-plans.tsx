@@ -45,7 +45,7 @@ export function WorkoutPlans() {
 
   function onSearch(value: string) {
     searchParams.set('q', value)
-    setSearchParams(searchParams)
+    setSearchParams(searchParams, { replace: true })
 
     setQuery(value)
   }
@@ -88,14 +88,14 @@ export function WorkoutPlans() {
                 {workoutPlans.map((item) => (
                   <WorkoutPlanItem key={item.slug} {...item} />
                 ))}
+                {workoutPlans.length === 0 && (
+                  <div className="w-full h-32 flex flex-col items-center justify-center gap-2 opacity-70">
+                    <Ghost size={32} strokeWidth={1.3} />
+                    <span className="text-center">Nenhuma planilha encontrado</span>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        )}
-        {workoutPlans.length === 0 && (
-          <div className="w-full h-32 flex flex-col items-center justify-center gap-2 opacity-70">
-            <Ghost size={32} strokeWidth={1.3} />
-            <span className="text-center">Nenhuma planilha encontrado</span>
           </div>
         )}
       </main>

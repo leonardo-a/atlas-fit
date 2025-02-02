@@ -1,5 +1,6 @@
 export interface WorkoutPlanSummary {
   id: string
+  student: string
   author: string
   authorId: string
   exercises: number
