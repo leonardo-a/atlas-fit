@@ -8,7 +8,8 @@ type UserRoles = 'STUDENT' | 'PERSONAL_TRAINER' | 'ADMIN'
 interface User {
   id: string;
   name: string
-  role: UserRoles;
+  shortName: string
+  role: UserRoles
 }
 
 interface AuthContextType {
@@ -33,7 +34,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser({
       role,
       id: sub,
-      name: name.split(' ')[0],
+      name,
+      shortName: name.split(' ')[0],
     })
 
     CookiesHelper.setCookie('authToken', token, 7)

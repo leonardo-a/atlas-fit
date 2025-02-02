@@ -37,26 +37,18 @@ export function Home() {
   return (
     <>
       <Header />
-      <div className="mt-16 flex flex-col justify-end gap-4 h-44 p-4 bg-linear-to-tr from-orange-200 to-orange-100">
+      <div className="mt-16 flex flex-col justify-end gap-4 h-44 p-4 bg-linear-to-tr from-orange-200 to-orange-100 rounded-lg mx-4">
         <div className="leading-tight">
-          {
-            user?.role === 'PERSONAL_TRAINER' && (
-              <>
-                <h2 className="font-semibold text-md text-slate-950">Bem vindo, {user.name}!</h2>
-                <p className="text-md text-slate-800">Acompanhe os treinos dos seus alunos</p>
-              </>
-            )
-          }
-          {
-            user?.role === 'STUDENT' && (
-              <>
-                <h2 className="font-semibold text-md text-slate-950">Bem vindo, {user.name}!</h2>
-                <p className="text-md text-slate-800">Confira sua rotina de treino da semana</p>
-              </>
-            )
-          }
+          <h2 className="font-semibold text-md text-slate-950">Bem vindo, {user?.name}!</h2>
+          <p className="text-md text-slate-800">
+            {
+              user?.role === 'PERSONAL_TRAINER'
+                ? 'Acompanhe os treinos dos seus alunos'
+                : 'Confira sua rotina de treino da semana'
+            }
+          </p>
         </div>
-        <WeekCarousel />
+        <WeekCarousel size="sm" />
       </div>
       <main className="flex flex-col gap-4 flex-1 items-center bg-slate-100 px-5">
         {workoutPlansStatus === 'pending' && (
@@ -74,24 +66,20 @@ export function Home() {
         )}
         {(workoutPlansStatus === 'success' && workoutPlans) && (
           <>
-            {
-              user?.role === 'PERSONAL_TRAINER' && (
-                <div className="flex justify-between w-full items-center">
-                  <div className="flex items-center gap-1">
-                    <ClipboardList />
-                    <p className="text-xl font-bold my-4">Planilhas</p>
-                  </div>
-                  {/* <NewWorkoutPlanDrawer /> */}
-                  <NewWorkoutPlanSheet />
-                </div>
-              )
-            }
-            {
-              user?.role === 'STUDENT' && (
-                <p className="text-2xl font-bold my-2">Minhas Planilhas</p>
-              )
-            }
-            <Input placeholder="Nome da planilha..." />
+            <div className="flex w-full items-center justify-between mt-2">
+              <div className="flex items-center gap-1">
+                <ClipboardList size={20} />
+                <p className="text-md my-4 leading-none">
+                  {
+                    user?.role === 'PERSONAL_TRAINER'
+                      ? 'Planilhas'
+                      : 'Meus Treinos'
+                    }
+                </p>
+              </div>
+              {user?.role === 'PERSONAL_TRAINER' && (<NewWorkoutPlanSheet />)}
+            </div>
+            <Input placeholder="Busque por planilhas..." />
             <div className="w-full flex flex-col gap-4">
               {workoutPlans.map((item) => (
                 <WorkoutPlanItem key={item.slug} {...item} />

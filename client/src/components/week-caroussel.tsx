@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import { addDays, format, setDefaultOptions, startOfWeek } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { useEffect, useState } from 'react'
@@ -7,9 +8,10 @@ setDefaultOptions({ locale: ptBR })
 interface WeekCarouselProps {
   onWeekDayPress?: (weekDay: number) => void
   selectedWeekDay?: number
+  size?: 'sm' | 'default'
 }
 
-export function WeekCarousel({ onWeekDayPress, selectedWeekDay }: WeekCarouselProps) {
+export function WeekCarousel({ onWeekDayPress, selectedWeekDay, size }: WeekCarouselProps) {
   const [weekDays, setWeekDays] = useState<Date[]>([])
   const [currentWeekDay, setCurrentWeekDay] = useState<number>(
     selectedWeekDay || new Date().getDay() + 1,
@@ -36,11 +38,12 @@ export function WeekCarousel({ onWeekDayPress, selectedWeekDay }: WeekCarouselPr
       {weekDays.map((day, index) => (
         <button
           key={index}
-          className={`flex flex-col resize-none items-center justify-center p-2 rounded-xl size-16 ${
-              currentWeekDay === day.getDay() + 1
-? 'bg-lime-200 text-slate-700'
-: 'text-slate-500'
-            }`}
+          className={cn([
+            'flex flex-col resize-none items-center justify-center p-2 rounded-xl h-16 w-16 text-slate-500',
+            (currentWeekDay === day.getDay() + 1) && 'bg-lime-200 text-slate-700',
+            size === 'sm' && 'h-12 w-12',
+
+          ])}
           onClick={() => handleClick(day.getDay() + 1)}
         >
           <span className="font-medium leading-none">{format(day, 'EEEEEE')}</span>

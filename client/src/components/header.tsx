@@ -7,10 +7,9 @@ export function Header() {
       <Link to="/">
         <div className="flex items-center gap-2 text-lime-500">
           <Omega size={28} />
-          <p className="italic font-display font-black text-lg">AtlasFit</p>
         </div>
       </Link>
-      <Link to="perfil">
+      <Link to="/perfil">
         <UserCircle size={28} className="text-slate-600" />
       </Link>
     </div>
