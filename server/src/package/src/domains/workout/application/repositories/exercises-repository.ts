@@ -9,4 +9,6 @@ export abstract class ExercisesRepository {
   abstract findBySlug(slug: string): Promise<Exercise | null>
 
   abstract create(exercise: Exercise): Promise<void>
+
+  abstract save(exercise: Exercise): Promise<void>
 }

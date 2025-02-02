@@ -48,9 +48,9 @@ describe('Get Workout Plan Details (E2E)', () => {
 
     const accessToken = jwt.sign({
       sub: author.id.toString(),
+      name: author.name,
       role: author.role,
     })
-
     const workoutPlanId = workoutPlan.id.toString()
 
     const response = await request(app.getHttpServer())

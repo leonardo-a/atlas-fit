@@ -43,6 +43,7 @@ describe('Fetch Exercises (E2E)', () => {
 
     const accessToken = jwt.sign({
       sub: user.id.toString(),
+      name: user.name,
       role: user.role,
     })
 

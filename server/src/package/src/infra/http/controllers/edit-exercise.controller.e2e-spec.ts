@@ -7,35 +7,34 @@ import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { PersonalTrainerFactory } from 'test/factories/make-personal-trainer'
-import { StudentFactory } from 'test/factories/make-student'
+import { ExerciseFactory } from 'test/factories/make-exercise'
 
-describe('Create Workout Plan (E2E)', () => {
+describe('Create Exercise (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let personalTrainerFactory: PersonalTrainerFactory
-  let studentFactory: StudentFactory
+  let exerciseFactory: ExerciseFactory
   let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [PersonalTrainerFactory, StudentFactory],
+      providers: [PersonalTrainerFactory, ExerciseFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
-    personalTrainerFactory = moduleRef.get(PersonalTrainerFactory)
-    studentFactory = moduleRef.get(StudentFactory)
     jwt = moduleRef.get(JwtService)
+
+    personalTrainerFactory = moduleRef.get(PersonalTrainerFactory)
+    exerciseFactory = moduleRef.get(ExerciseFactory)
 
     await app.init()
   })
 
-  test('[POST] /workout-plans', async () => {
+  test('[PUT] /exercises/:id', async () => {
     const user = await personalTrainerFactory.makePrismaPersonalTrainer()
-
-    const student = await studentFactory.makePrismaStudent()
 
     const accessToken = jwt.sign({
       sub: user.id.toString(),
@@ -43,25 +42,29 @@ describe('Create Workout Plan (E2E)', () => {
       role: user.role,
     })
 
-    const studentId = student.id.toString()
+    const exercise = await exerciseFactory.makePrismaExercise({
+      name: 'Flyer',
+    })
+
+    const exerciseId = exercise.id.toString()
 
     const response = await request(app.getHttpServer())
-      .post('/workout-plans')
+      .put(`/exercises/${exerciseId}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        studentId,
-        title: 'My Workout',
+        name: 'Bench press',
+        videoUrl: exercise.videoUrl,
+        description: exercise.description,
       })
 
-    expect(response.statusCode).toBe(201)
+    expect(response.statusCode).toBe(204)
 
-    const workoutPlanOnDatabase = await prisma.workoutPlan.findFirst({
+    const exerciseOnDatabase = await prisma.exercise.findFirst({
       where: {
-        title: 'My Workout',
+        name: 'Bench press',
       },
     })
 
-    expect(workoutPlanOnDatabase).toBeTruthy()
-    expect(workoutPlanOnDatabase?.studentId).toEqual(studentId)
+    expect(exerciseOnDatabase).toBeTruthy()
   })
 })

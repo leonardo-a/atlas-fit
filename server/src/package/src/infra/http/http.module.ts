@@ -5,6 +5,7 @@ import { AuthenticateUserUseCase } from '@/domains/workout/application/use-cases
 import { CreateExerciseUseCase } from '@/domains/workout/application/use-cases/create-exercise'
 import { CreateWorkoutPlanUseCase } from '@/domains/workout/application/use-cases/create-workout-plan'
 import { DeleteWorkoutPlanUseCase } from '@/domains/workout/application/use-cases/delete-workout-plan'
+import { EditExerciseUseCase } from '@/domains/workout/application/use-cases/edit-exercise'
 import { FetchExercisesUseCase } from '@/domains/workout/application/use-cases/fetch-exercises'
 import { FetchStudentsUseCase } from '@/domains/workout/application/use-cases/fetch-students'
 import { FetchWeekDayWorkoutPlanExercisesUseCase } from '@/domains/workout/application/use-cases/fetch-week-day-workout-plan-exercises'
@@ -20,6 +21,7 @@ import { CreateAccountController } from './controllers/create-account.controller
 import { CreateExerciseController } from './controllers/create-exercise.controller'
 import { CreateWorkoutPlanController } from './controllers/create-workout-plan.controller'
 import { DeleteWrokoutPlanController } from './controllers/delete-workout-plan.controller'
+import { EditExerciseController } from './controllers/edit-exercise.controller'
 import { FetchExercisesController } from './controllers/fetch-exercises.controller'
 import { FetchStudentsController } from './controllers/fetch-students.controller'
 import { FetchWeekDayWorkoutPlanExercisesController } from './controllers/fetch-week-day-workout-plan-exercises.controller'
@@ -42,6 +44,7 @@ import { RemoveExerciseFromWorkoutPlanController } from './controllers/remove-ex
     GetWorkoutPlanDetailsController,
     FetchExercisesController,
     FetchStudentsController,
+    EditExerciseController,
   ],
   providers: [
     AuthenticateUserUseCase,
@@ -56,6 +59,7 @@ import { RemoveExerciseFromWorkoutPlanController } from './controllers/remove-ex
     GetWorkoutPlanDetailsUseCase,
     FetchExercisesUseCase,
     FetchStudentsUseCase,
+    EditExerciseUseCase,
   ],
 })
 export class HttpModule {}

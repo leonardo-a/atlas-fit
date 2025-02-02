@@ -70,4 +70,15 @@ export class PrismaExercisesRepository implements ExercisesRepository {
 
     await this.prisma.exercise.create({ data })
   }
+
+  async save(exercise: Exercise): Promise<void> {
+    const data = PrismaExerciseMapper.toPrisma(exercise)
+
+    await this.prisma.exercise.update({
+      data,
+      where: {
+        id: data.id,
+      },
+    })
+  }
 }

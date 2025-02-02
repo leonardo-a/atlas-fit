@@ -15,8 +15,19 @@ export class Exercise extends Entity<ExerciseProps> {
     return this.props.name
   }
 
+  set name(name: string) {
+    this.props.name = name
+    this.props.slug = Slug.createFromText(name)
+
+    this.touch()
+  }
+
   get videoUrl() {
     return this.props.videoUrl
+  }
+
+  set videoUrl(url: string | null | undefined) {
+    this.props.videoUrl = url
   }
 
   get slug() {
@@ -25,6 +36,14 @@ export class Exercise extends Entity<ExerciseProps> {
 
   get description() {
     return this.props.description
+  }
+
+  set description(description: string | null | undefined) {
+    this.props.description = description
+  }
+
+  private touch() {
+    // this.props.updatedAt = new Date()
   }
 
   static create(props: Optional<ExerciseProps, 'slug'>, id?: UniqueEntityID) {

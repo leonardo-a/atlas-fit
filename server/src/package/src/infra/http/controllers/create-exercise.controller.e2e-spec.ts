@@ -32,7 +32,11 @@ describe('Create Exercise (E2E)', () => {
   test('[POST] /exercises', async () => {
     const user = await personalTrainerFactory.makePrismaPersonalTrainer()
 
-    const accessToken = jwt.sign({ sub: user.id.toString(), role: user.role })
+    const accessToken = jwt.sign({
+      sub: user.id.toString(),
+      name: user.name,
+      role: user.role,
+    })
 
     const response = await request(app.getHttpServer())
       .post('/exercises')

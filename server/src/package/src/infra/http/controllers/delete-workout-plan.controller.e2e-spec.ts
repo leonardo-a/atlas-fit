@@ -49,6 +49,7 @@ describe('Delete Workout Plan (E2E)', () => {
 
     const accessToken = jwt.sign({
       sub: author.id.toString(),
+      name: author.name,
       role: author.role,
     })
 
