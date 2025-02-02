@@ -33,6 +33,7 @@ export class PrismaWorkoutPlansRepository implements WorkoutPlansRepository {
       skip: (page - 1) * 20,
       include: {
         author: true,
+        student: true,
         workoutPlanExercises: true,
       },
     })

@@ -34,15 +34,18 @@ export class EditExerciseUseCase {
       return left(new ResourceNotFoundError())
     }
 
-    const exerciseWithSameSlug = await this.exercisesRepository.findBySlug(
-      Slug.createFromText(name).value,
-    )
+    if (name.toLowerCase() !== exercise.name.toLowerCase()) {
+      const exerciseWithSameSlug = await this.exercisesRepository.findBySlug(
+        Slug.createFromText(name).value,
+      )
 
-    if (exerciseWithSameSlug) {
-      return left(new ExerciseAlreadyExistsError(name))
+      if (exerciseWithSameSlug) {
+        return left(new ExerciseAlreadyExistsError(name))
+      }
+
+      exercise.name = name
     }
 
-    exercise.name = name
     exercise.videoUrl = videoUrl
     exercise.description = description
 

@@ -1,5 +1,5 @@
 import { WorkoutPlanExercisesRepository } from '@/domains/workout/application/repositories/workout-plan-exercises-repository'
-import { WorkoutPlanExerciseWithName } from '@/domains/workout/enterprise/entities/value-objects/workout-plan-exercise-with-name'
+import { WorkoutPlanExerciseWithDetails } from '@/domains/workout/enterprise/entities/value-objects/workout-plan-exercise-with-details'
 import { WorkoutPlanExercise } from '@/domains/workout/enterprise/entities/workout-plan-exercise'
 import { InMemoryExercisesRepository } from './in-memory-exercises-repository'
 
@@ -35,7 +35,7 @@ export class InMemoryWorkoutPlanExercisesRepository
   async findManyByWorkoutPlanWeekDay(
     workoutPlanId: string,
     weekDay: number,
-  ): Promise<WorkoutPlanExerciseWithName[]> {
+  ): Promise<WorkoutPlanExerciseWithDetails[]> {
     const workoutPlanExercise = this.items.filter(
       (item) =>
         item.workoutPlanId.toString() === workoutPlanId &&
@@ -51,12 +51,13 @@ export class InMemoryWorkoutPlanExercisesRepository
         throw new Error('Exercise not found.')
       }
 
-      return WorkoutPlanExerciseWithName.create({
+      return WorkoutPlanExerciseWithDetails.create({
         workoutPlanExerciseId: e.id,
         exerciseId: exercise.id,
         name: exercise.name,
         repetitions: e.repetitions,
         sets: e.sets,
+        videoUrl: exercise.videoUrl,
       })
     })
 

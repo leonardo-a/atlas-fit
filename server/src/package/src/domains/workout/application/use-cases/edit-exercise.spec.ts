@@ -34,6 +34,31 @@ describe('Edit Exercise Use Case', () => {
     expect(inMemoryExercisesRepository.items[0].name).toEqual('Bench press')
   })
 
+  it('should be able to edit an exercise name only if it is different', async () => {
+    const exercise = makeExercise({
+      name: 'Bench Press',
+    })
+
+    inMemoryExercisesRepository.items.push(exercise)
+
+    const response = await sut.execute({
+      exerciseId: exercise.id.toString(),
+      name: 'Bench press',
+      description: 'A new description',
+    })
+
+    console.log(inMemoryExercisesRepository.items)
+
+    expect(response.isRight()).toBeTruthy()
+    expect(inMemoryExercisesRepository.items).toHaveLength(1)
+    expect(inMemoryExercisesRepository.items[0]).toEqual(
+      expect.objectContaining({
+        name: 'Bench Press',
+        description: 'A new description',
+      }),
+    )
+  })
+
   it('should be able to edit an exercise name with an already existing name', async () => {
     const exercise = makeExercise({
       name: 'Bench Presss',

@@ -6,6 +6,7 @@ export class WorkoutPlanSummaryPresenter {
       id: workoutPlanSummary.id.toString(),
       slug: workoutPlanSummary.slug.value,
       title: workoutPlanSummary.title,
+      student: workoutPlanSummary.student,
       author: workoutPlanSummary.author,
       authorId: workoutPlanSummary.authorId.toString(),
       exercises: workoutPlanSummary.exercises,

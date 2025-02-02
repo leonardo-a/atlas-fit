@@ -9,6 +9,7 @@ export interface WorkoutPlanSummaryProps {
   description?: string | null
   authorId: UniqueEntityID
   author: string
+  student: string
   exercises: number
 }
 
@@ -31,6 +32,10 @@ export class WorkoutPlanSummary extends ValueObject<WorkoutPlanSummaryProps> {
 
   get author() {
     return this.props.author
+  }
+
+  get student() {
+    return this.props.student
   }
 
   get exercises() {

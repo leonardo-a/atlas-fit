@@ -61,10 +61,19 @@ export class InMemoryWorkoutPlansRepository implements WorkoutPlansRepository {
           throw new ResourceNotFoundError()
         }
 
+        const student = this.studentsRepository.items.find(
+          (s) => s.id === item.studentId,
+        )
+
+        if (!student) {
+          throw new ResourceNotFoundError()
+        }
+
         return WorkoutPlanSummary.create({
           id: item.id,
           author: author.name,
           authorId: item.authorId,
+          student: student.name,
           exercises,
           slug: item.slug,
           title: item.title,

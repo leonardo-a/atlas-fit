@@ -10,6 +10,7 @@ import { WorkoutPlanSummary } from '@/domains/workout/enterprise/entities/value-
 
 type PrismaWorkoutPlanSummary = PrismaWorkoutPlan & {
   author: PrismaUser
+  student: PrismaUser
   workoutPlanExercises: PrismaWorkoutPlanExercise[]
 }
 
@@ -19,6 +20,7 @@ export class PrismaWorkoutPlanSummaryMapper {
       id: new UniqueEntityID(raw.id),
       author: raw.author.name,
       authorId: new UniqueEntityID(raw.authorId),
+      student: raw.student.name,
       title: raw.title,
       slug: Slug.create(raw.slug),
       exercises: raw.workoutPlanExercises.length,

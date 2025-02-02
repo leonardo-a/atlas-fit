@@ -16,7 +16,7 @@ import { FetchWeekDayWorkoutPlanExercisesUseCase } from '@/domains/workout/appli
 import { CurrentUser } from '@/infra/auth/current-user.decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe'
-import { WorkoutPlanExerciseWithNamePresenter } from '../presenters/workout-plan-exercise-with-name-presenter'
+import { WorkoutPlanExerciseWithDetailsPresenter } from '../presenters/workout-plan-exercise-with-details-presenter'
 
 const weekDayQueryParamSchema = z
   .string()
@@ -65,7 +65,7 @@ export class FetchWeekDayWorkoutPlanExercisesController {
 
     return {
       weekDayExercises: result.value.weekDayExercises.map(
-        WorkoutPlanExerciseWithNamePresenter.toHTTP,
+        WorkoutPlanExerciseWithDetailsPresenter.toHTTP,
       ),
     }
   }

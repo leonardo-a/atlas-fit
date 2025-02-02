@@ -1,4 +1,4 @@
-import { WorkoutPlanExerciseWithName } from '../../enterprise/entities/value-objects/workout-plan-exercise-with-name'
+import { WorkoutPlanExerciseWithDetails } from '../../enterprise/entities/value-objects/workout-plan-exercise-with-details'
 import { WorkoutPlanExercise } from '../../enterprise/entities/workout-plan-exercise'
 
 export abstract class WorkoutPlanExercisesRepository {
@@ -11,7 +11,7 @@ export abstract class WorkoutPlanExercisesRepository {
   abstract findManyByWorkoutPlanWeekDay(
     workoutPlanId: string,
     weekDay: number,
-  ): Promise<WorkoutPlanExerciseWithName[]>
+  ): Promise<WorkoutPlanExerciseWithDetails[]>
 
   abstract create(workoutPlanExercise: WorkoutPlanExercise): Promise<void>
 

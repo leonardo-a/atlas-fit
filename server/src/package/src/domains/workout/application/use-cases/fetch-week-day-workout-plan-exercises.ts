@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { Either, left, right } from '@/core/either'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
-import { WorkoutPlanExerciseWithName } from '../../enterprise/entities/value-objects/workout-plan-exercise-with-name'
+import { WorkoutPlanExerciseWithDetails } from '../../enterprise/entities/value-objects/workout-plan-exercise-with-details'
 import { WorkoutPlanExercisesRepository } from '../repositories/workout-plan-exercises-repository'
 import { WorkoutPlansRepository } from '../repositories/workout-plans-repository'
 
@@ -15,7 +15,7 @@ interface FetchWeekDayWorkoutPlanExercisesUseCaseRequest {
 
 type FetchWeekDayWorkoutPlanExercisesUseCaseResponse = Either<
   NotAllowedError | ResourceNotFoundError,
-  { weekDayExercises: WorkoutPlanExerciseWithName[] }
+  { weekDayExercises: WorkoutPlanExerciseWithDetails[] }
 >
 
 @Injectable()

@@ -10,6 +10,7 @@ export class PrismaExerciseMapper {
       {
         name: raw.name,
         description: raw.description,
+        videoUrl: raw.videoUrl,
         slug: Slug.create(raw.slug),
       },
       new UniqueEntityID(raw.id),
@@ -21,6 +22,7 @@ export class PrismaExerciseMapper {
       id: exercise.id.toString(),
       name: exercise.name,
       slug: exercise.slug.value,
+      videoUrl: exercise.videoUrl,
       description: exercise.description,
     }
   }
