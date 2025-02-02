@@ -1,0 +1,26 @@
+services:
+  database:
+    container_name: gym-tracker-pg
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: gym-tracker
+      PGDATA: /data/postgres
+    volumes:
+      - ./data/pg:/data/postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 20s
+      timeout: 3s
+      retries: 3
+  api:
+    container_name: gym-tracker-api
+    build: .
+    ports:
+      - 3333:3333
+    depends_on:
+      database:
+        condition: service_healthy
