@@ -1,16 +1,27 @@
-import { Dumbbell } from 'lucide-react'
+import { Dumbbell, PlayCircle } from 'lucide-react'
 
-import { WorkoutPlanExerciseWithName } from '@/types/exercises'
+import { WorkoutPlanExerciseWithDetails } from '@/types/exercises'
+import { ExerciseVideoDialog } from './exercise-video-dialog'
+import { Button } from './ui/button'
 
-type WorkoutPlanExerciseProps = WorkoutPlanExerciseWithName
+type WorkoutPlanExerciseProps = WorkoutPlanExerciseWithDetails
 
-export function WorkoutPlanExercise({ name, repetitions, sets }: WorkoutPlanExerciseProps) {
+export function WorkoutPlanExercise({ name, repetitions, sets, videoUrl }: WorkoutPlanExerciseProps) {
   return (
     <div
       className="w-full bg-slate-50 px-2 py-3 rounded-md shadow-sm"
     >
       <div className="flex justify-between">
-        <div>
+        <div className="flex gap-2">
+          {
+            videoUrl
+              ? (<ExerciseVideoDialog name={name} videoUrl={videoUrl} />)
+              : (
+                <Button disabled size="icon" className="bg-slate-400">
+                  <PlayCircle />
+                </Button>
+                )
+          }
           <span className="text lg font-bold text-slate-800">{name}</span>
         </div>
         <div className="flex items-center gap-2">

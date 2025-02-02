@@ -1,9 +1,10 @@
-export interface WorkoutPlanExerciseWithName {
+export interface WorkoutPlanExerciseWithDetails {
   workoutPlanExerciseId: string
   exerciseId: string
   name: string
   sets: number
   repetitions: number
+  videoUrl?: string
 }
 
 export interface Exercise {

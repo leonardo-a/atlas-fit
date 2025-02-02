@@ -1,4 +1,4 @@
-import { BedDouble, CloudAlert, Loader2 } from 'lucide-react'
+import { BedDouble, ClipboardList, CloudAlert, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useLocation, useParams, useSearchParams } from 'react-router'
 
@@ -9,7 +9,7 @@ import { WorkoutPlanExercise } from '@/components/workout-plan-exercise'
 import { useAuth } from '@/contexts/auth-context'
 import { api } from '@/lib/axios'
 import { RequestStatus } from '@/types/app'
-import { WorkoutPlanExerciseWithName } from '@/types/exercises'
+import { WorkoutPlanExerciseWithDetails } from '@/types/exercises'
 import { WorkoutPlanWithDetails } from '@/types/workout-plan'
 
 export function WorkoutPlan() {
@@ -20,7 +20,7 @@ export function WorkoutPlan() {
 
   const [status, setStatus] = useState<RequestStatus>('pending')
   const [workoutPlan, setWorkoutPlan] = useState<WorkoutPlanWithDetails | null>(null)
-  const [exercises, setExercises] = useState<WorkoutPlanExerciseWithName[]>([])
+  const [exercises, setExercises] = useState<WorkoutPlanExerciseWithDetails[]>([])
   const [weekDay, setWeekDay] = useState<number>(() => {
     const weekDay = searchParams.get('dia')
 
@@ -54,6 +54,8 @@ export function WorkoutPlan() {
           weekDay,
         },
       })
+
+      console.log(exercises)
 
       setExercises(response.data.weekDayExercises)
       searchParams.delete('upt')
@@ -89,10 +91,13 @@ export function WorkoutPlan() {
           </div>
         )}
         {status === 'success' && workoutPlan !== null && (
-          <div className="w-full flex-1 flex flex-col gap-6">
-            <div className="flex flex-col justify-center items-center">
-              <p className="text-sm font-medium text-slate-500 leading-none">Planilha</p>
-              <h2 className="text-2xl font-bold text-slate-900 leading-none">{workoutPlan.title}</h2>
+          <div className="w-full flex-1 flex flex-col gap-6 my-4">
+            <div className="flex gap-3 justify-between items-center">
+              <div className="flex flex-col justify-center items-start">
+                <h2 className="text-2xl font-bold text-slate-900 leading-none">{workoutPlan.title}</h2>
+                <p className="text-sm font-medium text-slate-500 leading-none">{workoutPlan.description}</p>
+              </div>
+              <ClipboardList size={36} strokeWidth={1.6} />
             </div>
             <WeekCarousel selectedWeekDay={weekDay} onWeekDayPress={onWeekDayChange} />
             <div className="w-full bg-slate-50 flex-1 flex flex-col rounded-md space-y-3 px-2 py-4 shadow-xs">
