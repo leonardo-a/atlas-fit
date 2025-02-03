@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router'
 
 import { SignUpForm } from '@/components/sign-up-form'
 import { useAuth } from '@/contexts/auth-context'
-import { Dumbbell } from 'lucide-react'
+import Logo from '/logo.svg'
 
 export function SignUp() {
   const { isAuthenticated } = useAuth()
@@ -20,7 +20,7 @@ export function SignUp() {
       <div className="flex flex-col items-center justify-center h-dvh bg-lime-300">
         {/* <Dumbbell /> */}
         <div className="flex flex-col justify-between w-full h-56 text-left  p-6">
-          <Dumbbell size={36} className="mx-auto opacity-65" />
+          <img src={Logo} height={52} width={52} className="mx-auto brightness-0 opacity-80" />
 
           <div className="space-y-2">
             <h1 className="text-4xl font-black font-display">Novo Usuário</h1>
