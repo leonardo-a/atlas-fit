@@ -113,7 +113,7 @@ export function WorkoutPlan() {
                       {
                         exercises.map((item) => (
                           <WorkoutPlanExercise
-                            key={item.workoutPlanExerciseId}
+                            key={item.id}
                             {...item}
                           />
                         ))
