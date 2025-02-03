@@ -1,4 +1,4 @@
-import { CloudAlert, Dumbbell, Ghost, Loader2 } from 'lucide-react'
+import { BookPlus, CloudAlert, Dumbbell, Ghost, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 
@@ -10,6 +10,8 @@ import { useAuth } from '@/contexts/auth-context'
 import { api } from '@/lib/axios'
 import { RequestStatus } from '@/types/app'
 import { Exercise } from '@/types/exercises'
+import { NewExerciseSheet } from '@/components/new-exercise-sheet'
+import { Button } from '@/components/ui/button'
 
 export function Exercises() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -84,7 +86,7 @@ export function Exercises() {
         {(requestStatus === 'success') && (
           <div className="w-full">
             <div className="space-y-3">
-              <div className="w-full flex flex-col gap-4 mb-8">
+              <div className="w-full flex flex-col gap-4 mb-20">
                 {exercises.map((item) => (
                   <div
                     key={`exercise-${item.id}`}
@@ -118,6 +120,13 @@ export function Exercises() {
             </div>
           </div>
         )}
+        <div className="h-16 px-4 bg-slate-50 right-0 fixed bottom-0 grid place-items-center rounded-tl-xl shadow-xs">
+          <NewExerciseSheet>
+            <Button variant="success" className="lg:text-xl" size="lg">
+              <BookPlus /> Registrar Exercício
+            </Button>
+          </NewExerciseSheet>
+        </div>
       </main>
     </>
   )

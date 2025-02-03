@@ -31,9 +31,9 @@ export function EditExerciseSheet({ exercise, children }: EditExerciseSheetProps
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Novo exercício</SheetTitle>
+          <SheetTitle>Editar exercício</SheetTitle>
           <SheetDescription>
-            Registre um novo exercício no sistema
+            Altere ou acrescente informações no exercício
           </SheetDescription>
         </SheetHeader>
         <div className="mt-6">

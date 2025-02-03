@@ -1,4 +1,4 @@
-import { ClipboardList, CloudAlert, Ghost, Loader2 } from 'lucide-react'
+import { ClipboardList, ClipboardPlus, CloudAlert, Ghost, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router'
 
@@ -9,6 +9,8 @@ import { WorkoutPlanItem } from '@/components/workout-plan-item'
 import { api } from '@/lib/axios'
 import { RequestStatus } from '@/types/app'
 import { WorkoutPlanSummary } from '@/types/workout-plan'
+import { NewWorkoutPlanSheet } from '@/components/new-workout-plan-sheet'
+import { Button } from '@/components/ui/button'
 
 export function WorkoutPlans() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -67,7 +69,11 @@ export function WorkoutPlans() {
         </div>
       </SecondaryContainer>
       <main className="flex flex-col gap-4 flex-1 items-center bg-slate-100 px-5">
-        <Input placeholder="Busque por planilhas..." onChange={(evt) => onSearch(evt.currentTarget.value)} />
+        <div className="flex items-center gap-2 w-full">
+
+          <Input className="flex-1" placeholder="Busque por planilhas..." onChange={(evt) => onSearch(evt.currentTarget.value)} />
+
+        </div>
         {workoutPlansStatus === 'pending' && (
           <div className="my-auto">
             <Loader2 className="animate-spin text-lime-400" size={32} />
@@ -84,7 +90,7 @@ export function WorkoutPlans() {
         {(workoutPlansStatus === 'success') && (
           <div className="w-full">
             <div className="space-y-3">
-              <div className="w-full flex flex-col gap-4 mb-8">
+              <div className="w-full flex flex-col gap-4 mb-20">
                 {workoutPlans.map((item) => (
                   <WorkoutPlanItem key={item.slug} {...item} />
                 ))}
@@ -98,6 +104,13 @@ export function WorkoutPlans() {
             </div>
           </div>
         )}
+        <div className="h-16 px-4 bg-slate-50 right-0 fixed bottom-0 grid place-items-center rounded-tl-xl shadow-xs">
+          <NewWorkoutPlanSheet>
+            <Button variant="success" className="lg:text-xl" size="lg">
+              <ClipboardPlus /> Criar Planilha
+            </Button>
+          </NewWorkoutPlanSheet>
+        </div>
       </main>
     </>
   )
