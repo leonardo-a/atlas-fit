@@ -19,7 +19,7 @@ export function SignUp() {
     <>
       <div className="flex flex-col items-center justify-center h-dvh bg-lime-300">
         {/* <Dumbbell /> */}
-        <div className="flex flex-col justify-between w-full h-56 text-left  p-6">
+        <div className="flex flex-col justify-between w-full p-6 h-56 lg:h-auto max-w-lg lg:flex-row-reverse lg:items-center">
           <img src={Logo} height={52} width={52} className="mx-auto brightness-0 opacity-80" />
 
           <div className="space-y-2">
@@ -28,7 +28,7 @@ export function SignUp() {
           </div>
 
         </div>
-        <div className="bg-slate-100 shadow-md max-w-lg w-full p-4 space-y-6 lg:rounded-lg flex-1 lg:flex-0">
+        <div className="bg-slate-100 shadow-md max-w-lg w-full p-8 space-y-6 lg:rounded-lg flex-1 lg:flex-0">
           <SignUpForm />
         </div>
       </div>
