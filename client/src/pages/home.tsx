@@ -43,7 +43,7 @@ export function Home() {
       <Header />
       <SecondaryContainer className="mt-16 flex flex-col justify-end gap-4 h-44">
         <div className="leading-tight">
-          <h2 className="font-semibold text-md text-slate-950">Bem vindo, {user?.name}!</h2>
+          <h2 className="font-semibold text-md text-slate-950">Bem vindo, {user?.shortName}!</h2>
           <p className="text-md text-slate-800">
             {
               user?.role === 'PERSONAL_TRAINER'
