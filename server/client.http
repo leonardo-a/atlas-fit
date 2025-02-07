@@ -82,3 +82,11 @@ Authorization: Bearer {{authToken}}
 GET {{baseUrl}}/workout-plans/{{workoutPlanId}}
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
+
+
+###
+
+# @name fetch_students
+GET {{baseUrl}}/students
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
