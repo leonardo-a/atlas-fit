@@ -4,9 +4,11 @@
   "main": "index.js",
   "scripts": {
     "docker:dev": "docker compose --profile dev up -d",
-    "docker:dev:build": "docker compose --profile dev up -d --force-recreate --build ",
+    "docker:dev:build": "docker compose --profile dev up -d --force-recreate --build",
+    "docker:dev:down": "docker compose --profile dev down",
     "docker:prod": "docker compose up -d",
-    "docker:prod:build": "docker compose up -d --force-recreate --build"
+    "docker:prod:build": "docker compose up -d --force-recreate --build",
+    "docker:prod:down": "docker compose down"
   },
   "repository": {
     "type": "git",
