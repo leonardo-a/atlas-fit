@@ -1,15 +1,25 @@
-import { Dumbbell, PlayCircle } from 'lucide-react'
+import { PlayCircle } from 'lucide-react'
+import { useState } from 'react'
+
+import { useAuth } from '@/contexts/auth-context'
+import { cn } from '@/lib/utils'
 import { WorkoutPlanExerciseWithDetails } from '@/types/exercises'
 import { ExerciseVideoDialog } from './exercise-video-dialog'
-import { Button } from './ui/button'
-import { useAuth } from '@/contexts/auth-context'
 import { RemoveWorkoutPlanExerciseDialog } from './remove-workout-plan-exercise-dialog'
-import { useState } from 'react'
-import { cn } from '@/lib/utils'
+import { Button } from './ui/button'
 
-type WorkoutPlanExerciseProps = WorkoutPlanExerciseWithDetails
+interface WorkoutPlanExerciseProps extends WorkoutPlanExerciseWithDetails {
+  sequence: number
+}
 
-export function WorkoutPlanExercise({ id, name, repetitions, sets, videoUrl }: WorkoutPlanExerciseProps) {
+export function WorkoutPlanExercise({
+  id,
+  name,
+  repetitions,
+  sets,
+  videoUrl,
+  sequence,
+}: WorkoutPlanExerciseProps) {
   const { user } = useAuth()
   const [isActionsOpen, setIsActionsOpen] = useState(false)
 
@@ -19,13 +29,36 @@ export function WorkoutPlanExercise({ id, name, repetitions, sets, videoUrl }: W
       className={cn(
         'bg-slate-200 rounded-md transition-all ',
         isActionsOpen
-          ? 'max-h-40'
-          : 'max-h-16',
+          ? 'max-h-56'
+          : 'max-h-20',
       )}
     >
-      <div className="w-full h-16 bg-slate-50 px-2 py-3 rounded-md shadow-sm">
-        <div className="flex items-center gap-2">
-          <div className="flex">
+      <div className="w-full h-20 bg-slate-50 p-1 rounded-md shadow-xs">
+        <div className="flex items-center gap-3 h-full px-1 py-2 rounded-md">
+          <div className="size-6 bg-slate-200 rounded-full grid place-items-center">
+            <span className="text-xs text-slate-500 font-semibold">{sequence}</span>
+          </div>
+          <button
+            onClick={() => setIsActionsOpen(!isActionsOpen)}
+            className="flex flex-col justify-between h-full flex-1"
+          >
+            <div className="leading-tight text-left">
+              <p className="font-bold text-slate-800">{name}</p>
+              <p className="font-bold text-slate-800">{}</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold">{sets}</span>
+                <span className="bg-slate-200 text-slate-700 text-sm px-2 rounded-md">sets</span>
+              </div>
+              <div className="w-[1.5px] h-full bg-slate-300 rounded-full" />
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold">{repetitions}</span>
+                <span className="bg-slate-200 text-slate-700 text-sm px-2 rounded-md">reps</span>
+              </div>
+            </div>
+          </button>
+          <div>
             {videoUrl
               ? (
                 <ExerciseVideoDialog name={name} videoUrl={videoUrl} />
@@ -36,20 +69,6 @@ export function WorkoutPlanExercise({ id, name, repetitions, sets, videoUrl }: W
                 </Button>
                 )}
           </div>
-          <button
-            onClick={() => setIsActionsOpen(!isActionsOpen)}
-            className="flex items-center h-full justify-between flex-1"
-          >
-            <div>
-              <p className="font-bold text-slate-800">{name}</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1">
-                <Dumbbell size={20} className="text-lime-500" />
-                <span className="text-slate-500">{sets}x{repetitions}</span>
-              </div>
-            </div>
-          </button>
         </div>
       </div>
 

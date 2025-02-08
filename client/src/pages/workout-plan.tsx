@@ -100,8 +100,8 @@ export function WorkoutPlan() {
               <ClipboardList size={36} strokeWidth={1.6} />
             </div>
             <WeekCarousel selectedWeekDay={weekDay} onWeekDayPress={onWeekDayChange} />
-            <div className="w-full bg-slate-50 flex-1 flex flex-col rounded-md space-y-3 px-2 py-4 shadow-xs">
-              <div className="flex flex-col flex-1 gap-3 w-full px-4">
+            <div className="w-full bg-slate-50 flex-1 flex flex-col rounded-md space-y-3 p-1 shadow-xs">
+              <div className="flex flex-col flex-1 gap-3 w-full px-5 py-4 border-2 border-orange-200 rounded-md">
                 {
                   user?.role === 'PERSONAL_TRAINER' && (
                     <AssignExerciseDrawer weekDay={weekDay} workoutPlanId={id || ''} />
@@ -111,9 +111,10 @@ export function WorkoutPlan() {
                   ? (
                     <>
                       {
-                        exercises.map((item) => (
+                        exercises.map((item, i) => (
                           <WorkoutPlanExercise
                             key={item.id}
+                            sequence={i + 1}
                             {...item}
                           />
                         ))
