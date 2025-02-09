@@ -1,17 +1,28 @@
-import { cn } from '@/lib/utils'
 import { HTMLAttributes } from 'react'
 
-type SecondaryContainerProps = HTMLAttributes<HTMLDivElement>
+import { cn } from '@/lib/utils'
 
-export function SecondaryContainer({ className, children, ...props }: SecondaryContainerProps) {
+interface SecondaryContainerProps extends HTMLAttributes<HTMLDivElement> {
+  bannerUrl?: string
+}
+
+export function SecondaryContainer({ className, children, bannerUrl, ...props }: SecondaryContainerProps) {
   return (
     <div
       className={cn([
-        'p-4 bg-linear-to-tr from-orange-200 to-orange-100 rounded-lg mx-4',
+        'p-4 rounded-lg mx-4 relative z-10 bg-orange-200',
         className,
       ])}
       {...props}
     >
+      {bannerUrl && (
+        <div className="absolute h-full object-cover w-full -z-10 bottom-0 left-0 rounded-lg p-1">
+          <img
+            src={bannerUrl}
+            className="object-cover h-full w-full rounded-lg"
+          />
+        </div>
+      )}
       {children}
     </div>
   )

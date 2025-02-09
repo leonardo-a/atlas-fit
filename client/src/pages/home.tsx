@@ -1,8 +1,13 @@
 import { BookCopy, ClipboardList, CloudAlert, Dumbbell, Loader2, Users2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router'
+
+import Dumbbells from '../../public/dumbells-2.jpg'
+import Exercise from '../../public/exercise.jpg'
+import Students from '../../public/students.jpg'
+import WorkoutPlan from '../../public/workout-plan.jpg'
 
 import { Header } from '@/components/header'
+import { PersonalTrainerOption } from '@/components/personal-trainer-options'
 import { SecondaryContainer } from '@/components/secondary-container'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -41,10 +46,13 @@ export function Home() {
   return (
     <>
       <Header />
-      <SecondaryContainer className="mt-16 flex flex-col justify-end gap-4 h-44">
-        <div className="leading-tight">
-          <h2 className="font-semibold text-md text-slate-950">Bem vindo, {user?.shortName}!</h2>
-          <p className="text-md text-slate-800">
+      <SecondaryContainer
+        bannerUrl={Dumbbells}
+        className="mt-16 flex flex-col justify-end items-start gap-12 h-56 lg:h-72"
+      >
+        <div className="leading-tight bg-slate-950/30 lg:bg-transparent p-2 rounded-lg">
+          <h2 className="font-semibold text-md text-lime-300">Bem vindo, {user?.shortName}!</h2>
+          <p className="text-md text-lime-200">
             {
               user?.role === 'PERSONAL_TRAINER'
                 ? 'Acompanhe os treinos dos seus alunos'
@@ -52,7 +60,9 @@ export function Home() {
             }
           </p>
         </div>
-        <WeekCarousel size="sm" />
+        <div className="max-w-xl w-full">
+          <WeekCarousel size="sm" />
+        </div>
       </SecondaryContainer>
       <main className="flex flex-col gap-4 flex-1 items-center bg-slate-100 px-5">
         {workoutPlansStatus === 'pending' && (
@@ -85,51 +95,27 @@ export function Home() {
         {(user?.role === 'PERSONAL_TRAINER' || user?.role === 'ADMIN') && (
           <div className="w-full">
             <div className="grid grid-cols-1 w-full gap-4 my-8">
-              <Link to="/planilhas">
-                <Button variant="outline" className="h-32 [&_svg]:size-8 hover:bg-lime-200 w-full">
-                  <div className="flex w-full items-center justify-start gap-2">
-                    <div className="size-12 grid place-items-center">
-                      <ClipboardList strokeWidth={1} />
-                    </div>
-                    <div className="text-left">
-                      <p className="font-display text-lg">Minhas Planilhas</p>
-                      <p className="text-xs opacity-70">
-                        Consulte as planilhas de seus alunos
-                      </p>
-                    </div>
-                  </div>
-                </Button>
-              </Link>
-              <Link to="/exercicios">
-                <Button variant="outline" className="h-32 [&_svg]:size-8 hover:bg-lime-200 w-full">
-                  <div className="flex w-full items-center justify-start gap-2">
-                    <div className="size-12 grid place-items-center">
-                      <Dumbbell strokeWidth={1} />
-                    </div>
-                    <div className="text-left">
-                      <p className="font-display text-lg">Exercícios</p>
-                      <p className="text-xs opacity-70">
-                        Gerencie os exercícios cadastrados
-                      </p>
-                    </div>
-                  </div>
-                </Button>
-              </Link>
-              <Link to="/alunos">
-                <Button variant="outline" className="h-32 [&_svg]:size-8 hover:bg-lime-200 w-full">
-                  <div className="flex w-full items-center justify-start gap-2">
-                    <div className="size-12 grid place-items-center">
-                      <Users2 strokeWidth={1} />
-                    </div>
-                    <div className="text-left">
-                      <p className="font-display text-lg">Alunos</p>
-                      <p className="text-xs opacity-70">
-                        Procure por alunos cadastrados
-                      </p>
-                    </div>
-                  </div>
-                </Button>
-              </Link>
+              <PersonalTrainerOption
+                to="/planilhas"
+                title="Minhas Planilhas"
+                description="Consulte as planilhas de seus alunos"
+                icon={ClipboardList}
+                bannerUrl={WorkoutPlan}
+              />
+              <PersonalTrainerOption
+                to="/exercicios"
+                title="Exercícios"
+                description="Gerencie os exercícios cadastrados"
+                icon={Dumbbell}
+                bannerUrl={Exercise}
+              />
+              <PersonalTrainerOption
+                to="/alunos"
+                title="Alunos"
+                description="Procure por alunos cadastrados"
+                icon={Users2}
+                bannerUrl={Students}
+              />
               <Button variant="outline" className="h-32 [&_svg]:size-8" disabled>
                 <div className="flex w-full items-center justify-start gap-2">
                   <div className="size-12 grid place-items-center">
