@@ -68,7 +68,7 @@ export function WorkoutPlans() {
           <ClipboardList size={40} strokeWidth={1} />
         </div>
       </SecondaryContainer>
-      <main className="flex flex-col gap-4 flex-1 items-center bg-slate-100 px-5">
+      <main className="flex flex-col gap-4 flex-1 items-center px-5">
         <div className="flex items-center gap-2 w-full">
 
           <Input className="flex-1" placeholder="Busque por planilhas..." onChange={(evt) => onSearch(evt.currentTarget.value)} />
@@ -104,7 +104,7 @@ export function WorkoutPlans() {
             </div>
           </div>
         )}
-        <div className="h-16 px-4 bg-slate-50 right-0 fixed bottom-0 grid place-items-center rounded-tl-xl shadow-xs">
+        <div className="h-16 px-4 bg-slate-50 dark:bg-slate-950 right-0 fixed bottom-0 grid place-items-center rounded-tl-xl shadow-xs">
           <NewWorkoutPlanSheet>
             <Button variant="success" className="lg:text-xl" size="lg">
               <ClipboardPlus /> Criar Planilha

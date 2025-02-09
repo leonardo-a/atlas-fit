@@ -34,13 +34,13 @@ export function WeekCarousel({ onWeekDayPress, selectedWeekDay, size }: WeekCaro
 
   return (
 
-    <div className="bg-slate-50 p-2 rounded-lg flex justify-between shadow-xs">
+    <div className="bg-slate-50 dark:bg-slate-800 p-2 rounded-lg flex justify-between shadow-xs">
       {weekDays.map((day, index) => (
         <button
           key={index}
           className={cn([
             'flex flex-col resize-none items-center justify-center p-2 rounded-xl h-16 w-16 text-slate-500',
-            (currentWeekDay === day.getDay() + 1) && 'bg-lime-200 text-slate-700',
+            (currentWeekDay === day.getDay() + 1) && 'bg-lime-200 dark:bg-lime-300 text-slate-700 dark:text-slate-900',
             size === 'sm' && 'h-12 w-12',
 
           ])}

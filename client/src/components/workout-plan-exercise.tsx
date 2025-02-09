@@ -27,15 +27,15 @@ export function WorkoutPlanExercise({
     <div
       key={`workout-plan-exercise-${id}`}
       className={cn(
-        'bg-slate-200 rounded-md transition-all ',
+        'bg-slate-200 dark:bg-slate-800 rounded-md transition-all ',
         isActionsOpen
           ? 'max-h-56'
           : 'max-h-20',
       )}
     >
-      <div className="w-full h-20 bg-slate-50 p-1 rounded-md shadow-xs">
+      <div className="w-full h-20 bg-slate-50 dark:bg-slate-900 p-1 rounded-md shadow-xs">
         <div className="flex items-center gap-3 h-full px-1 py-2 rounded-md">
-          <div className="size-6 bg-slate-200 rounded-full grid place-items-center">
+          <div className="size-6 bg-slate-200 dark:bg-slate-800 rounded-full grid place-items-center">
             <span className="text-xs text-slate-500 font-semibold">{sequence}</span>
           </div>
           <button
@@ -43,18 +43,26 @@ export function WorkoutPlanExercise({
             className="flex flex-col justify-between h-full flex-1"
           >
             <div className="leading-tight text-left">
-              <p className="font-bold text-slate-800">{name}</p>
-              <p className="font-bold text-slate-800">{}</p>
+              <p className="font-bold text-slate-800 dark:text-slate-300">{name}</p>
+              <p className="font-bold text-slate-800 dark:text-slate-500">{}</p>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold">{sets}</span>
-                <span className="bg-slate-200 text-slate-700 text-sm px-2 rounded-md">sets</span>
+                <span
+                  className="bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-400 text-sm px-2 rounded-md"
+                >
+                  sets
+                </span>
               </div>
               <div className="w-[1.5px] h-full bg-slate-300 rounded-full" />
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold">{repetitions}</span>
-                <span className="bg-slate-200 text-slate-700 text-sm px-2 rounded-md">reps</span>
+                <span
+                  className="bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-400 text-sm px-2 rounded-md"
+                >
+                  reps
+                </span>
               </div>
             </div>
           </button>

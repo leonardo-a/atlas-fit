@@ -65,7 +65,7 @@ export function Students() {
           <Users2 size={40} strokeWidth={1} />
         </div>
       </SecondaryContainer>
-      <main className="flex flex-col gap-4 flex-1 items-center bg-slate-100 px-5">
+      <main className="flex flex-col gap-4 flex-1 items-center px-5">
         <Input placeholder="Nome ou email do aluno..." onChange={(evt) => onSearch(evt.currentTarget.value)} />
         {requestStatus === 'pending' && (
           <div className="my-auto">
@@ -87,9 +87,9 @@ export function Students() {
                 {students.map((item) => (
                   <div
                     key={`student-${item.id}`}
-                    className="w-full flex items-center gap-2 bg-slate-50 shadow-xs rounded-lg py-3 px-2"
+                    className="w-full flex items-center gap-2 bg-slate-50 dark:bg-slate-800 shadow-xs rounded-lg py-3 px-2"
                   >
-                    <div className="size-16 rounded-full grid place-items-center bg-lime-200">
+                    <div className="size-16 rounded-full grid place-items-center bg-lime-200 dark:bg-lime-300">
                       <User2 className="text-slate-500" strokeWidth={1} />
                     </div>
                     <div className="leading-tight">

@@ -12,7 +12,9 @@ import { WorkoutPlans } from './pages/workout-plans'
 
 export function App() {
   return (
-    <div className="flex flex-col min-h-dvh bg-slate-100">
+    <div
+      className="flex flex-col min-h-dvh bg-slate-100 dark:bg-slate-900 dark:text-slate-200"
+    >
       <Routes>
         <Route path="/entrar" element={<SignIn />} />
         <Route path="/cadastro" element={<SignUp />} />

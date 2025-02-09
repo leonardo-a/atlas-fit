@@ -83,7 +83,7 @@ export function WorkoutPlan() {
   return (
     <>
       <Header />
-      <main className="mt-16 flex-1 flex flex-col items-center bg-linear-to-tr from-orange-200 to-orange-100 p-4">
+      <main className="mt-16 flex-1 flex flex-col items-center bg-orange-200 bg-transparent p-4">
         {/* {workoutPlan} */}
         {status === 'pending' && (
           <div className="flex-1 grid place-items-center">
@@ -94,14 +94,18 @@ export function WorkoutPlan() {
           <div className="w-full flex-1 flex flex-col gap-6 my-4">
             <div className="flex gap-3 justify-between items-center">
               <div className="flex flex-col justify-center items-start">
-                <h2 className="text-2xl font-bold text-slate-900 leading-none">{workoutPlan.title}</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-300 leading-tight">{workoutPlan.title}</h2>
                 <p className="text-sm font-medium text-slate-500 leading-none">{workoutPlan.description}</p>
               </div>
               <ClipboardList size={36} strokeWidth={1.6} />
             </div>
-            <WeekCarousel selectedWeekDay={weekDay} onWeekDayPress={onWeekDayChange} />
-            <div className="w-full bg-slate-50 flex-1 flex flex-col rounded-md space-y-3 p-1 shadow-xs">
-              <div className="flex flex-col flex-1 gap-3 w-full px-5 py-4 border-2 border-orange-200 rounded-md">
+            <div className="flex justify-center w-full">
+              <div className="max-w-3xl w-full">
+                <WeekCarousel selectedWeekDay={weekDay} onWeekDayPress={onWeekDayChange} />
+              </div>
+            </div>
+            <div className="w-full bg-slate-50 dark:bg-slate-950 flex-1 flex flex-col rounded-md space-y-3 p-1 shadow-xs">
+              <div className="flex flex-col flex-1 gap-3 w-full px-5 py-4 border-2 border-orange-200 dark:border-lime-300 rounded-md">
                 {
                   user?.role === 'PERSONAL_TRAINER' && (
                     <AssignExerciseDrawer weekDay={weekDay} workoutPlanId={id || ''} />

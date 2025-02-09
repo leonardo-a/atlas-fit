@@ -1,10 +1,10 @@
 import { BookCopy, ClipboardList, CloudAlert, Dumbbell, Loader2, Users2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-import Dumbbells from '../../public/dumbells-2.jpg'
-import Exercise from '../../public/exercise.jpg'
-import Students from '../../public/students.jpg'
-import WorkoutPlan from '../../public/workout-plan.jpg'
+import Dumbbells from '../assets/dumbells-2.jpg'
+import Exercise from '../assets/exercise.jpg'
+import Students from '../assets/students.jpg'
+import WorkoutPlan from '../assets/workout-plan.jpg'
 
 import { Header } from '@/components/header'
 import { PersonalTrainerOption } from '@/components/personal-trainer-options'
@@ -48,11 +48,11 @@ export function Home() {
       <Header />
       <SecondaryContainer
         bannerUrl={Dumbbells}
-        className="mt-16 flex flex-col justify-end items-start gap-12 h-56 lg:h-72"
+        className="mt-16 flex flex-col justify-end items-start gap-12 h-56 lg:h-96"
       >
         <div className="leading-tight bg-slate-950/30 lg:bg-transparent p-2 rounded-lg">
-          <h2 className="font-semibold text-md text-lime-300">Bem vindo, {user?.shortName}!</h2>
-          <p className="text-md text-lime-200">
+          <h2 className="font-semibold text-md lg:text-2xl text-lime-300">Bem vindo, {user?.shortName}!</h2>
+          <p className="text-md lg:text-lg text-lime-200">
             {
               user?.role === 'PERSONAL_TRAINER'
                 ? 'Acompanhe os treinos dos seus alunos'
@@ -64,7 +64,7 @@ export function Home() {
           <WeekCarousel size="sm" />
         </div>
       </SecondaryContainer>
-      <main className="flex flex-col gap-4 flex-1 items-center bg-slate-100 px-5">
+      <main className="flex flex-col gap-4 flex-1 items-center px-5">
         {workoutPlansStatus === 'pending' && (
           <div className="my-auto">
             <Loader2 className="animate-spin text-lime-400" size={32} />

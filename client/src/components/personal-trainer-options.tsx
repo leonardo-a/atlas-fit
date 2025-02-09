@@ -20,18 +20,18 @@ export function PersonalTrainerOption({
   icon: Icon,
 }: PersonalTrainerOptionProps) {
   return (
-    <Link to={to} className="p-1 bg-slate-50 rounded-sm">
+    <Link to={to} className="p-1 bg-slate-50 dark:bg-slate-800 rounded-sm">
       <Button
         variant="outline"
         className={cn([
-          'h-32 [&_svg]:size-8 hover:bg-lime-200 w-full relative z-10 shadow-none',
+          'h-32 [&_svg]:size-8 hover:bg-lime-200 w-full relative z-10 shadow-none bg-transparent',
           bannerUrl && 'hover:bg-lime-200/80 z-10 lg:h-52',
         ])}
       >
         {bannerUrl && (
           <>
             <div
-              className="absolute bg-gradient-to-l from-transparent to-slate-50 to-95% -z-10 w-full h-full rounded-sm"
+              className="absolute bg-gradient-to-l from-transparent to-slate-50 dark:to-slate-900 to-95% -z-10 w-full h-full rounded-sm dark:border dark:border-lime-300"
             />
             <img
               src={bannerUrl}

@@ -68,7 +68,7 @@ export function Exercises() {
           <Dumbbell size={40} strokeWidth={1} />
         </div>
       </SecondaryContainer>
-      <main className="flex flex-col gap-4 flex-1 items-center bg-slate-100 px-5">
+      <main className="flex flex-col gap-4 flex-1 items-center px-5">
         <Input placeholder="Busque pelo nome do exercício..." onChange={(evt) => onSearch(evt.currentTarget.value)} />
         {requestStatus === 'pending' && (
           <div className="my-auto">
@@ -90,7 +90,7 @@ export function Exercises() {
                 {exercises.map((item) => (
                   <div
                     key={`exercise-${item.id}`}
-                    className="w-full flex items-center gap-2 bg-slate-50 shadow-xs rounded-lg py-3 px-2"
+                    className="w-full flex items-center gap-2 bg-slate-50 dark:bg-slate-800 shadow-xs rounded-lg py-3 px-2"
                   >
                     <div className="size-16 grid place-items-center">
                       <Dumbbell />
@@ -120,7 +120,7 @@ export function Exercises() {
             </div>
           </div>
         )}
-        <div className="h-16 px-4 bg-slate-50 right-0 fixed bottom-0 grid place-items-center rounded-tl-xl shadow-xs">
+        <div className="h-16 px-4 bg-slate-50 dark:bg-slate-950 right-0 fixed bottom-0 grid place-items-center rounded-tl-xl shadow-xs">
           <NewExerciseSheet>
             <Button variant="success" className="lg:text-xl" size="lg">
               <BookPlus /> Registrar Exercício

@@ -19,7 +19,7 @@ export function NewExerciseSheet({ children }: NewExerciseSheetProps) {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger>
+      <SheetTrigger asChild>
         {children || (
           <Button size="lg" variant="success" onClick={() => setIsOpen(true)}>
             <BookPlus />
