@@ -61,11 +61,11 @@ export function Exercises() {
       <Header />
       <SecondaryContainer className="mt-16 h-32 mb-4">
         <div className="flex justify-between items-center h-full">
-          <div className="leading-tight">
+          <div className="leading-tight dark:text-orange-400">
             <h1 className="font-display font-semibold text-xl">Exercícios</h1>
             <p className="text-sm opacity-70">Gerencie os exercícios cadastrados</p>
           </div>
-          <Dumbbell size={40} strokeWidth={1} />
+          <Dumbbell size={40} strokeWidth={1} className="dark:text-orange-400" />
         </div>
       </SecondaryContainer>
       <main className="flex flex-col gap-4 flex-1 items-center px-5">

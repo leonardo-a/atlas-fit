@@ -61,11 +61,11 @@ export function WorkoutPlans() {
       <Header />
       <SecondaryContainer className="mt-16 h-32 mb-4">
         <div className="flex justify-between items-center h-full">
-          <div className="leading-tight">
+          <div className="leading-tight dark:text-orange-400">
             <h1 className="font-display font-semibold text-xl">Minhas Planilhas</h1>
             <p className="text-sm opacity-70">Gerencia suas planilhas de treino</p>
           </div>
-          <ClipboardList size={40} strokeWidth={1} />
+          <ClipboardList size={40} strokeWidth={1} className="dark:text-orange-400" />
         </div>
       </SecondaryContainer>
       <main className="flex flex-col gap-4 flex-1 items-center px-5">

@@ -58,11 +58,11 @@ export function Students() {
       <Header />
       <SecondaryContainer className="mt-16 h-32 mb-4">
         <div className="flex justify-between items-center h-full">
-          <div className="leading-tight">
+          <div className="leading-tight dark:text-orange-400">
             <h1 className="font-display font-semibold text-xl">Alunos</h1>
             <p className="text-sm opacity-70">Procure por alunos cadastrados</p>
           </div>
-          <Users2 size={40} strokeWidth={1} />
+          <Users2 size={40} strokeWidth={1} className="dark:text-orange-400" />
         </div>
       </SecondaryContainer>
       <main className="flex flex-col gap-4 flex-1 items-center px-5">

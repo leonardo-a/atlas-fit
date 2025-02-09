@@ -10,7 +10,7 @@ export function SecondaryContainer({ className, children, bannerUrl, ...props }:
   return (
     <div
       className={cn([
-        'p-4 rounded-lg mx-4 relative z-10 bg-orange-200 dark:bg-slate-800 dark:border dark:border-lime-300',
+        'p-4 rounded-lg mx-4 relative z-10 bg-orange-200 dark:bg-slate-800 dark:border dark:border-orange-400',
         className,
       ])}
       {...props}
