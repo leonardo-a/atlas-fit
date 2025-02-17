@@ -20,6 +20,7 @@ export class PrismaWorkoutPlansRepository implements WorkoutPlansRepository {
     page,
     query,
     studentId,
+    authorId,
   }: WorkoutPlansFilterParams): Promise<WorkoutPlanSummary[]> {
     const workoutPlans = await this.prisma.workoutPlan.findMany({
       where: {
@@ -28,6 +29,7 @@ export class PrismaWorkoutPlansRepository implements WorkoutPlansRepository {
           mode: 'insensitive',
         },
         studentId: studentId ?? { contains: '' },
+        authorId: authorId ?? { contains: '' },
       },
       take: 20,
       skip: (page - 1) * 20,
