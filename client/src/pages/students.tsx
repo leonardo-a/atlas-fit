@@ -1,9 +1,10 @@
-import { CloudAlert, Ghost, Loader2, User2, Users2 } from 'lucide-react'
+import { CloudAlert, Ghost, Loader2, Users2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 
 import { Header } from '@/components/header'
 import { SecondaryContainer } from '@/components/secondary-container'
+import { StudentItem } from '@/components/student-item'
 import { Input } from '@/components/ui/input'
 import { useAuth } from '@/contexts/auth-context'
 import { api } from '@/lib/axios'
@@ -85,18 +86,7 @@ export function Students() {
             <div className="space-y-3">
               <div className="w-full flex flex-col gap-4 mb-8">
                 {students.map((item) => (
-                  <div
-                    key={`student-${item.id}`}
-                    className="w-full flex items-center gap-2 bg-slate-50 dark:bg-slate-800 shadow-xs rounded-lg py-3 px-2"
-                  >
-                    <div className="size-16 rounded-full grid place-items-center bg-lime-200 dark:bg-lime-300">
-                      <User2 className="text-slate-500" strokeWidth={1} />
-                    </div>
-                    <div className="leading-tight">
-                      <p className="font-bold">{item.name}</p>
-                      <p className="text-xs opacity-70">{item.email}</p>
-                    </div>
-                  </div>
+                  <StudentItem key={`student-${item.id}`} {...item} />
                 ))}
                 {students.length === 0 && (
                   <div className="w-full h-32 flex flex-col items-center justify-center gap-2 opacity-70">
